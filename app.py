@@ -187,33 +187,48 @@ def market_status():
 
 @app.get('/api/market/search')
 def market_search():
-    import os, json, urllib.request, urllib.parse, base64
+    """Search eBay ACTIVE listings. These are not completed-sale valuations."""
+    import os, json, urllib.request, urllib.parse, base64, statistics
     q=(request.args.get('q') or '').strip()[:120]
     source=(request.args.get('source') or 'ebay').lower()
+    category=(request.args.get('category') or 'all').lower()
+    condition=(request.args.get('condition') or 'all').lower()
     if len(q)<2: return jsonify(error='Enter at least two characters'),400
-    if source=='ebay':
-        client=os.getenv('EBAY_CLIENT_ID'); secret=os.getenv('EBAY_CLIENT_SECRET')
-        if not (client and secret): return jsonify(error='eBay API not configured. Add EBAY_CLIENT_ID and EBAY_CLIENT_SECRET to Render environment variables.'),503
-        try:
-            auth=base64.b64encode((client+':'+secret).encode()).decode()
-            body=urllib.parse.urlencode({'grant_type':'client_credentials','scope':'https://api.ebay.com/oauth/api_scope'}).encode()
-            req=urllib.request.Request('https://api.ebay.com/identity/v1/oauth2/token',data=body,headers={'Authorization':'Basic '+auth,'Content-Type':'application/x-www-form-urlencoded'},method='POST')
-            with urllib.request.urlopen(req,timeout=12) as r: token=json.load(r)['access_token']
-            url='https://api.ebay.com/buy/browse/v1/item_summary/search?'+urllib.parse.urlencode({'q':q,'limit':16})
-            req=urllib.request.Request(url,headers={'Authorization':'Bearer '+token,'X-EBAY-C-MARKETPLACE-ID':'EBAY_US'})
-            with urllib.request.urlopen(req,timeout=12) as r: data=json.load(r)
-            items=[]
-            for x in data.get('itemSummaries',[]):
-                price=x.get('price') or {}
-                items.append({'title':x.get('title','Untitled'),'price':price.get('value'),'currency':price.get('currency'),'image':(x.get('image') or {}).get('imageUrl'),'url':x.get('itemWebUrl'),'source':'eBay active listing'})
-            return jsonify(items=items,disclaimer='Active listing asking prices only. Not completed sales or verified card valuations.')
-        except Exception as e:
-            app.logger.warning('eBay API error: %s',str(e))
-            return jsonify(error='eBay API request failed. Check credentials, Browse API eligibility, and Render logs.'),502
-    if source=='tcgplayer':
-        return jsonify(error='TCGplayer catalog/pricing requires approved API access and an integration adapted to the granted endpoints. No TCGplayer data is connected yet.'),503
-    return jsonify(error='Unknown source'),400
-
+    if source!='ebay':
+        return jsonify(error='This source does not have an authorized live price feed. Choose eBay or open the external catalog search.'),503
+    client=os.getenv('EBAY_CLIENT_ID'); secret=os.getenv('EBAY_CLIENT_SECRET')
+    if not (client and secret):
+        return jsonify(error='Live eBay listings need EBAY_CLIENT_ID and EBAY_CLIENT_SECRET in Render Environment. Use the external search links below meanwhile.'),503
+    try:
+        auth=base64.b64encode((client+':'+secret).encode()).decode()
+        body=urllib.parse.urlencode({'grant_type':'client_credentials','scope':'https://api.ebay.com/oauth/api_scope'}).encode()
+        req=urllib.request.Request('https://api.ebay.com/identity/v1/oauth2/token',data=body,headers={'Authorization':'Basic '+auth,'Content-Type':'application/x-www-form-urlencoded'},method='POST')
+        with urllib.request.urlopen(req,timeout=12) as r: token=json.load(r)['access_token']
+        terms={'pokemon':'pokemon card','onepiece':'one piece card','sports':'sports trading card'}
+        search_term=(terms.get(category,'')+' '+q).strip()
+        params={'q':search_term,'limit':40}
+        # eBay condition filter is a listing condition, not a professional card grade.
+        if condition=='new': params['filter']='conditions:{NEW}'
+        elif condition=='used': params['filter']='conditions:{USED}'
+        url='https://api.ebay.com/buy/browse/v1/item_summary/search?'+urllib.parse.urlencode(params)
+        req=urllib.request.Request(url,headers={'Authorization':'Bearer '+token,'X-EBAY-C-MARKETPLACE-ID':'EBAY_US'})
+        with urllib.request.urlopen(req,timeout=15) as r: data=json.load(r)
+        items=[]
+        for x in data.get('itemSummaries',[]):
+            price=x.get('price') or {}
+            try: amount=float(price.get('value'))
+            except (TypeError,ValueError): amount=None
+            shipping=x.get('shippingOptions') or []
+            ship_cost=(shipping[0].get('shippingCost') or {}) if shipping else {}
+            try: ship=float(ship_cost.get('value'))
+            except (TypeError,ValueError): ship=None
+            items.append({'title':x.get('title','Untitled'),'price':amount,'currency':price.get('currency'),'shipping':ship,'image':(x.get('image') or {}).get('imageUrl'),'url':x.get('itemWebUrl'),'condition':x.get('condition'),'source':'eBay active listing'})
+        usd=[x['price'] for x in items if x['currency']=='USD' and x['price'] is not None]
+        stats={'count':len(items),'min_asking_usd':min(usd) if usd else None,'median_asking_usd':round(statistics.median(usd),2) if usd else None,'max_asking_usd':max(usd) if usd else None}
+        return jsonify(items=items,stats=stats,disclaimer='Active eBay seller asking prices, not completed sales or appraised values. Search may include different variants, grades and conditions; shipping/taxes may be additional.')
+    except Exception as e:
+        app.logger.warning('eBay marketplace API error: %s',str(e))
+        return jsonify(error='eBay request failed. Check API credentials, Browse API access, and Render logs.'),502
 
 # Photo identification uses a configured vision API; no guesses are made without it.
 @app.get('/api/identify/status')
