@@ -30,7 +30,7 @@ function createEditor(side,data){
  const stage=document.createElement('div');stage.className='tq-editor';
  const photo=document.createElement('img');photo.alt='Card photo for manual border adjustment';photo.src=data.clean_image||data.annotated;photo.draggable=false;stage.append(photo);
  const svg=mk('svg',{viewBox:'0 0 600 840',role:'group','aria-label':'Adjustable card edges and printed frame'});stage.append(svg);outer.append(stage);
- const defaults={l:48,r:552,t:55,b:785};let state={corners:[[5,5],[594,5],[594,834],[5,834]],...defaults};
+ const defaults={l:48,r:552,t:55,b:785};let state={corners:Array.isArray(data.auto_corners)&&data.auto_corners.length===4?data.auto_corners:[[5,5],[594,5],[594,834],[5,834]],...defaults};
  // Use detected printed edges only when all four passed backend consistency checks.
  const p=data.border_pixels||{};
  if(['left','right','top','bottom'].every(k=>Number.isFinite(p[k]))){state.l=p.left;state.r=599-p.right;state.t=p.top;state.b=839-p.bottom;}
