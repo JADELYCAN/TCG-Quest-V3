@@ -7,62 +7,65 @@ def measure(file):
     if img is None: raise ValueError('Invalid image')
     h,w=img.shape[:2]; scale=min(1,1400/max(h,w)); img=cv2.resize(img,None,fx=scale,fy=scale) if scale<1 else img
     h,w=img.shape[:2]; gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    blur=cv2.GaussianBlur(gray,(5,5),0); edges=cv2.Canny(blur,45,140)
-    cnts,_=cv2.findContours(edges,cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
-    quads=[]
-    for c in cnts:
-        p=cv2.arcLength(c,True); a=cv2.approxPolyDP(c,.025*p,True)
-        if len(a)==4 and cv2.isContourConvex(a):
-            area=cv2.contourArea(a)
-            if .16*w*h<area<.98*w*h: quads.append((area,a.reshape(4,2).astype('float32')))
-    # Rounded card corners often produce 8+ contour vertices, not four.
-    # Prefer foreground segmentation on a pale background and use a rotated
-    # rectangle to estimate the four *virtual* card corners.
+    # Estimate the photographed background from the four image corners.
+    # Compare LAB colors to the background instead of using a fixed gray cutoff:
+    # this handles white, cream, and softly shaded photo backgrounds.
+    lab_img=cv2.cvtColor(img,cv2.COLOR_BGR2LAB).astype(np.float32)
+    pad=max(8,int(min(h,w)*.045))
+    patches=[lab_img[:pad,:pad],lab_img[:pad,-pad:],lab_img[-pad:,:pad],lab_img[-pad:,-pad:]]
+    bg=np.median(np.concatenate([q.reshape(-1,3) for q in patches]),axis=0)
+    distance=np.linalg.norm(lab_img-bg,axis=2)
+    blurred=cv2.GaussianBlur(distance,(7,7),0)
+    masks=[]
+    for threshold in (13,19,26,34):
+        mask=np.uint8(blurred>threshold)*255
+        mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((17,17),np.uint8))
+        mask=cv2.morphologyEx(mask,cv2.MORPH_OPEN,np.ones((5,5),np.uint8))
+        masks.append(mask)
     candidates=[]
-    for threshold in (165, 180, 195):
-        mask=np.uint8(gray < threshold)*255
-        mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((11,11),np.uint8))
+    for mask in masks:
         contours,_=cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         for contour in contours:
             area=cv2.contourArea(contour)
-            if not (.25*w*h < area < .92*w*h): continue
+            if not (.20*w*h<area<.92*w*h):continue
             rect=cv2.minAreaRect(contour)
             rw,rh=rect[1]
-            if min(rw,rh)<1: continue
+            if min(rw,rh)<1:continue
             aspect=max(rw,rh)/min(rw,rh)
-            if not (1.18 < aspect < 1.8): continue
+            if not 1.22<aspect<1.72:continue
             box=cv2.boxPoints(rect).astype(np.float32)
-            if np.min(box[:,0]) < -3 or np.min(box[:,1]) < -3 or np.max(box[:,0]) > w+3 or np.max(box[:,1]) > h+3: continue
-            candidates.append((area,box))
-    if candidates:
-        pts=max(candidates,key=lambda x:x[0])[1]
-    elif quads:
-        pts=max(quads,key=lambda x:x[0])[1]
-    else:
-        raise ValueError('Card outline not detected. Use a plain contrasting background with all edges visible.')
+            if np.any(box[:,0]<-5) or np.any(box[:,1]<-5) or np.any(box[:,0]>w+5) or np.any(box[:,1]>h+5):continue
+            fill=area/max(rw*rh,1)
+            if fill<.76:continue
+            # Favor filled card-like silhouettes over fragmented artwork.
+            score=area*(.5+.5*min(fill,1))
+            candidates.append((score,box,contour,mask))
+    if not candidates:
+        raise ValueError('Card outline not detected confidently. Use a plain contrasting background and show all four edges.')
+    _,pts,physical_contour,physical_mask=max(candidates,key=lambda c:c[0])
     s=pts.sum(axis=1); d=np.diff(pts,axis=1).flatten()
     corners=np.array([pts[np.argmin(s)],pts[np.argmin(d)],pts[np.argmax(s)],pts[np.argmax(d)]],dtype=np.float32)
     dst=np.array([[0,0],[599,0],[599,839],[0,839]],dtype=np.float32)
     transform=cv2.getPerspectiveTransform(corners,dst)
     warp=cv2.warpPerspective(img,transform,(600,840))
-    # Segment the physical card against a light background, preserving rounded corners.
-    # Threshold conservatively so light gray borders remain part of the card.
-    physical_mask=np.uint8(gray<195)*255
-    physical_mask=cv2.morphologyEx(physical_mask,cv2.MORPH_CLOSE,np.ones((9,9),np.uint8))
-    physical_mask=cv2.morphologyEx(physical_mask,cv2.MORPH_OPEN,np.ones((7,7),np.uint8))
-    contours,_=cv2.findContours(physical_mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-    physical_contour=None
-    if contours:
-        for contour in sorted(contours,key=cv2.contourArea,reverse=True):
-            area=cv2.contourArea(contour)
-            if .2*w*h<area<.9*w*h:
-                physical_contour=contour
-                break
-    if physical_contour is not None:
-        physical_contour=cv2.approxPolyDP(physical_contour,0.002*cv2.arcLength(physical_contour,True),True)
-        warped_contour=cv2.perspectiveTransform(physical_contour.astype(np.float32),transform)
+    # Warp the same silhouette used for outer-edge detection.
+    physical_contour=cv2.approxPolyDP(physical_contour,0.002*cv2.arcLength(physical_contour,True),True)
+    warped_contour=cv2.perspectiveTransform(physical_contour.astype(np.float32),transform)
+    # Derive initial editable corner positions from the silhouette in the
+    # rectified photo; these are estimates, never locked controls.
+    contour_pts=warped_contour.reshape(-1,2)
+    contour_pts[:,0]=np.clip(contour_pts[:,0],0,599)
+    contour_pts[:,1]=np.clip(contour_pts[:,1],0,839)
+    # Estimate edge locations away from the rounded corners.
+    middle_x=contour_pts[(contour_pts[:,1]>250)&(contour_pts[:,1]<590),0]
+    middle_y=contour_pts[(contour_pts[:,0]>180)&(contour_pts[:,0]<420),1]
+    if len(middle_x)>3 and len(middle_y)>3:
+        x0,x1=float(np.min(middle_x)),float(np.max(middle_x))
+        y0,y1=float(np.min(middle_y)),float(np.max(middle_y))
     else:
-        warped_contour=None
+        x0,x1,y0,y1=3.,596.,3.,836.
+    auto_corners=[[round(x0,1),round(y0,1)],[round(x1,1),round(y0,1)],
+                  [round(x1,1),round(y1,1)],[round(x0,1),round(y1,1)]]
     # Detect PRINTED frame boundaries independently from the physical card edge.
     # Sample many scan lines; a true straight frame should recur in most strips.
     g=cv2.cvtColor(warp,cv2.COLOR_BGR2GRAY)
@@ -155,7 +158,7 @@ def measure(file):
              'Printed border could not be located consistently. No centering percentages '
              'were calculated. Try a sharper, straight-on photo with even lighting.')
     return {'horizontal':horizontal,'vertical':vertical,'border_pixels':borders,
-            'confidence':confidence,'annotated':annotated,'clean_image':clean_image,'warning':warning}
+            'confidence':confidence,'annotated':annotated,'clean_image':clean_image,'auto_corners':auto_corners,'warning':warning}
 
 @app.get('/')
 def home(): return send_from_directory('.','index.html')
