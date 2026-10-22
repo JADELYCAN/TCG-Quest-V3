@@ -136,6 +136,10 @@ def measure(file):
         borders={'left':round(left,1),'right':round(right,1),'top':round(top,1),'bottom':round(bottom,1)}
         for x in (l,r): cv2.line(warp,(int(x),0),(int(x),839),(0,230,255),2)
         for y in (t,b): cv2.line(warp,(0,int(y)),(599,int(y)),(0,230,255),2)
+    # Provide an unannotated image for interactive green/yellow editing.
+    clean_warp=cv2.warpPerspective(img,transform,(600,840))
+    _,clean_buffer=cv2.imencode('.jpg',clean_warp,[cv2.IMWRITE_JPEG_QUALITY,90])
+    clean_image='data:image/jpeg;base64,'+__import__('base64').b64encode(clean_buffer).decode()
     # Green shows the rectified PHYSICAL card boundary; yellow shows the
     # estimated printed border only if detection passed the consistency test.
     if warped_contour is not None:
@@ -151,7 +155,7 @@ def measure(file):
              'Printed border could not be located consistently. No centering percentages '
              'were calculated. Try a sharper, straight-on photo with even lighting.')
     return {'horizontal':horizontal,'vertical':vertical,'border_pixels':borders,
-            'confidence':confidence,'annotated':annotated,'warning':warning}
+            'confidence':confidence,'annotated':annotated,'clean_image':clean_image,'warning':warning}
 
 @app.get('/')
 def home(): return send_from_directory('.','index.html')
