@@ -171,7 +171,22 @@ def measure(file):
             'confidence':confidence,'photo_quality':quality,'annotated':annotated,'clean_image':clean_image,'auto_corners':auto_corners,'warning':warning}
 
 @app.get('/')
-def home(): return send_from_directory('.','index.html')
+def home(): return send_from_directory('.', 'index.html')
+
+# Serve homepage artwork stored alongside index.html in the repository.
+# Flask does not automatically expose files in the repository root.
+@app.get('/<path:filename>')
+def homepage_artwork(filename):
+    from pathlib import Path
+    from flask import abort
+    allowed_names = {'collector-banner.jpg', 'reference-banner.png', 'reference-logo.png'}
+    allowed_names.update(f'nav-{i}.png' for i in range(1, 10))
+    allowed_names.update(f'action-{i}.png' for i in range(1, 5))
+    allowed_names.update(f'feature-{i}.png' for i in range(1, 5))
+    if filename not in allowed_names:
+        abort(404)
+    return send_from_directory(str(Path(__file__).resolve().parent), filename)
+
 @app.post('/api/measure')
 def api():
     try:
