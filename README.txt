@@ -1,6 +1,1 @@
-TCG Quest V3 tabbed collector dashboard
-
-Replace only index.html in GitHub, commit, wait for Render.
-Includes: responsive tab navigation, collector homepage, profile photo upload or camera input, animated motion/glow toggle, local browser storage.
-Photo animation is a CSS motion effect, NOT an AI cartoon transformation. Real AI cartoon generation requires an additional image generation backend and billing.
-All previous app sections and scripts retained. Back up your existing index.html before replacing.
+TCG Quest V3 visual redesign based on your first screenshot. Replace index.html in your GitHub repo AND upload collector-banner.jpg to the repository root. The banner is cropped from the reference image you supplied. Avatar upload and glow/motion toggle are preserved. Existing backend app.py unchanged. Data and API limitations remain.
