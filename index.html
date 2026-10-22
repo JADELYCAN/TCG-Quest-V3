@@ -626,4 +626,38 @@ state.image=body.image;save();$('identity-message').textContent='Your cartoon ch
 });
 fetch('/api/avatar/status').then(r=>r.json()).then(x=>{available=!!x.available;$('identity-message').textContent=available?'AI cartoon generator ready. Upload a selfie to begin.':'To enable AI generation, add OPENAI_API_KEY to Render environment variables.'}).catch(()=>{$('identity-message').textContent='Could not reach AI image service.'});
 render();
+})();</script><style id="tq-manual-collector-style">
+#tq-manual-avatar-preview{width:190px;height:220px;max-width:100%;background:radial-gradient(circle at 50% 40%,#234f80,#09182d 72%);border:1px solid #2d92c8;border-radius:18px;display:grid;place-items:center;overflow:hidden}
+#tq-manual-avatar-preview svg{width:100%;height:100%}
+#tq-manual-avatar-row{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:15px}
+#tq-manual-avatar-actions{display:flex;flex-direction:column;gap:9px;max-width:350px}
+#tq-manual-avatar-actions button{padding:11px 14px;border-radius:9px;border:1px solid #37bbfa;background:#073e68;color:#fff;cursor:pointer;font-weight:700}
+#tq-manual-banner-avatar{display:none;position:absolute;left:50%;top:0;transform:translateX(-50%);height:100%;width:auto;aspect-ratio:190/220;z-index:3;pointer-events:none;filter:drop-shadow(0 0 10px #000a)}
+#tq-manual-banner-avatar svg{height:100%;width:100%}
+#tq-manual-banner-avatar.is-visible{display:block}
+#tq-manual-banner-avatar.is-floating svg{animation:tq-manual-bob 3.4s ease-in-out infinite alternate;filter:drop-shadow(0 0 9px #31ffc6)}
+@keyframes tq-manual-bob{to{transform:translateY(-5px);filter:drop-shadow(0 0 20px #31ffc6)}}
+@media(prefers-reduced-motion:reduce){#tq-manual-banner-avatar.is-floating svg{animation:none}}
+</style>
+<script id="tq-manual-collector-script">(()=>{
+'use strict';
+const panel=document.getElementById('identity-panel'), banner=document.querySelector('.ref-hero');if(!panel||!banner)return;
+const KEY='tcgquest-collector-manual-v1';
+const colors={Green:'#158b5a',Blue:'#176cbb',Red:'#bf3448',Black:'#263346',Orange:'#e27625'};
+const safeColor=name=>colors[name]||colors.Green;
+const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return {}}};
+let state={hat:'Baseball cap',hatColor:'Green',clothing:'Hoodie',clothingColor:'Green',motion:true,show:false,...read()};
+const row=document.createElement('div');row.id='tq-manual-avatar-row';
+row.innerHTML='<div id="tq-manual-avatar-preview" role="img" aria-label="Live cartoon collector preview"></div><div id="tq-manual-avatar-actions"><strong>Instant cartoon collector — no AI credits required</strong><span>Choose a hat, clothing and colors above. Your cartoon updates immediately.</span><button id="tq-manual-show" type="button"></button><small>This is a preset illustration layered over the center of the banner, not a selfie-based likeness or a seamless AI edit.</small></div>';
+const preview=panel.querySelector('#identity-preview');preview.after(row);
+const layer=document.createElement('div');layer.id='tq-manual-banner-avatar';banner.append(layer);
+function svg(){const hat=safeColor(state.hatColor),cloth=safeColor(state.clothingColor),hoodie=state.clothing==='Hoodie',jersey=state.clothing==='Jersey',nohat=state.hat==='No hat',beanie=state.hat==='Beanie';return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 220" aria-hidden="true"><defs><linearGradient id="skin" x2="0" y2="1"><stop stop-color="#eec5a2"/><stop offset="1" stop-color="#b97755"/></linearGradient></defs><ellipse cx="95" cy="210" rx="75" ry="9" fill="#000" opacity=".3"/><path d="M17 220 Q19 153 64 149 L126 149 Q172 154 174 220" fill="${cloth}" stroke="#102c40" stroke-width="5"/><path d="M72 151 L95 176 L118 151" fill="${hoodie?'#23493e':'#eee'}" opacity=".8"/><path d="M78 135 L78 158 Q95 177 112 158 L112 135" fill="url(#skin)"/><ellipse cx="95" cy="96" rx="48" ry="57" fill="url(#skin)" stroke="#7e4934" stroke-width="2"/><path d="M48 94 Q42 40 95 38 Q151 40 142 94 L134 69 Q97 48 55 70Z" fill="#2d2524"/><ellipse cx="79" cy="101" rx="4" ry="5" fill="#1b2530"/><ellipse cx="111" cy="101" rx="4" ry="5" fill="#1b2530"/><path d="M94 108 l-4 13 h8" fill="none" stroke="#9e6248" stroke-width="2"/><path d="M80 134 Q95 145 111 134" fill="none" stroke="#773d3a" stroke-width="3" stroke-linecap="round"/>${nohat?'':beanie?`<path d="M49 75 Q46 25 95 20 Q145 25 141 75 Z" fill="${hat}" stroke="#13283a" stroke-width="4"/><rect x="47" y="65" width="96" height="20" rx="8" fill="${hat}" stroke="#13283a" stroke-width="3"/>`:`<path d="M44 76 Q40 24 95 28 Q151 24 146 76 L145 84 L45 84Z" fill="${hat}" stroke="#13283a" stroke-width="4"/><path d="M91 81 Q145 72 162 88 Q145 99 92 91" fill="${hat}" stroke="#13283a" stroke-width="3"/><path d="M82 51 L95 44 L108 51 L95 61Z" fill="#c4ff51"/>`}${hoodie?`<path d="M65 150 Q45 157 50 196 M125 150 Q145 157 140 196" fill="none" stroke="#0b3d37" stroke-width="5"/><path d="M85 175 L83 210 M105 175 L107 210" stroke="#ddd" stroke-width="2"/>`:jersey?`<path d="M64 153 L95 182 L126 153" fill="none" stroke="#f4f4f4" stroke-width="5"/><text x="95" y="211" text-anchor="middle" font-size="24" font-family="sans-serif" font-weight="900" fill="#fff">10</text>`:`<path d="M70 152 Q95 170 120 152" fill="none" stroke="#eee" stroke-width="3"/>`}</svg>`}
+function render(){const art=svg();document.getElementById('tq-manual-avatar-preview').innerHTML=art;layer.innerHTML=art;layer.classList.toggle('is-visible',!!state.show);layer.classList.toggle('is-floating',!!state.motion);document.getElementById('tq-manual-show').textContent=state.show?'Hide preset from banner':'Show preset on banner';}
+function update(){for(const k of ['hat','hatColor','clothing','clothingColor']){const e=document.getElementById('identity-'+k);if(e)state[k]=e.value}state.motion=!!document.getElementById('identity-motion')?.checked;try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}render()}
+for(const k of ['hat','hatColor','clothing','clothingColor','motion'])document.getElementById('identity-'+k)?.addEventListener('change',update);
+document.getElementById('tq-manual-show').addEventListener('click',()=>{state.show=!state.show;update()});
+for(const k of ['hat','hatColor','clothing','clothingColor']){const e=document.getElementById('identity-'+k);if(e&&Array.from(e.options).some(o=>o.value===state[k]))e.value=state[k]}
+const motion=document.getElementById('identity-motion');if(motion)motion.checked=!!state.motion;
+document.getElementById('identity-reset')?.addEventListener('click',()=>{state={hat:'Baseball cap',hatColor:'Green',clothing:'Hoodie',clothingColor:'Green',motion:true,show:false};update()});
+render();
 })();</script></body></html>
