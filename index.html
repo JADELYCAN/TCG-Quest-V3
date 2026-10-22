@@ -152,6 +152,17 @@ nav{width:100%!important;min-height:81px!important;height:81px!important;display
 @media(max-width:1050px){.tq-logo{width:160px!important;min-width:160px!important;background-size:145px auto!important}.tq-tabs a{height:70px!important;min-height:70px!important}nav{height:71px!important;min-height:71px!important}.ref-main{grid-template-columns:1fr 1fr!important}.ref-recent{grid-column:1/-1!important;min-height:180px!important}.ref-metrics strong{font-size:20px!important}}
 @media(max-width:750px){nav{height:auto!important;min-height:62px!important;padding-left:8px!important;position:relative!important}.tq-logo{height:60px!important;width:170px!important;min-width:170px!important;background-size:160px auto!important}.tq-tabs{display:none!important}.tq-tabs.tq-open{display:flex!important;flex-direction:column!important;position:absolute!important;top:61px!important;left:0!important;right:0!important;z-index:200!important;background:#03101d!important}.tq-tabs.tq-open a{background-image:none!important;height:50px!important;min-height:50px!important;padding:8px!important}.tq-tabs.tq-open a>span{opacity:1!important}.ref-hero{min-height:110px!important;aspect-ratio:1536/234!important;background-size:cover!important}.ref-quick{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.ref-quick>button{min-height:75px!important}.ref-main{grid-template-columns:1fr!important}.ref-recent{grid-column:auto!important}.ref-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ref-bottom{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.ref-bottom>button{min-height:130px!important}}
 @media(max-width:430px){.ref-quick,.ref-bottom{grid-template-columns:1fr!important}.ref-quick>button{max-height:100px!important}.ref-bottom>button{max-height:185px!important}}
+</style><style id="tq-nav-image-fix">
+/* Nav images attach to semantic targets, not shifting child positions. */
+#tq-tabs>a[data-tab="home"]{background-image:url("nav-1.png")!important}
+#tq-tabs>a[data-tab="collection"]{background-image:url("nav-2.png")!important}
+#tq-tabs>a[data-tab="scanner"]{background-image:url("nav-3.png")!important}
+#tq-tabs>a[data-tab="prices"]{background-image:url("nav-4.png")!important}
+#tq-tabs>a[data-tab="grading"]{background-image:url("nav-5.png")!important}
+#tq-tabs>a[data-tab="market"]{background-image:url("nav-6.png")!important}
+#tq-tabs>a[data-tab="rewards"][aria-label*="Leaderboards"]{background-image:url("nav-7.png")!important}
+#tq-tabs>a[data-tab="rewards"]:not([aria-label*="Leaderboards"]){background-image:url("nav-8.png")!important}
+#tq-tabs>a[data-tab="features"]{background-image:url("nav-9.png")!important}
 </style></head><body><div class="shell"><nav><a aria-label="TCG Quest Home" class="brand tq-logo" href="#home"><span class="ref-logo">TCG<span>✧</span>QUEST</span></a><button aria-expanded="false" aria-label="Toggle navigation" id="tq-menu-toggle" type="button">☰ Menu</button><div aria-label="Main navigation" class="tq-tabs" id="tq-tabs" role="navigation"><a data-tab="home" href="#home"><span class="ref-nav-icon">⌂</span><span>Home</span></a><a data-tab="collection" href="#collection"><span class="ref-nav-icon">▱</span><span>My Collection</span></a><a data-tab="scanner" href="#scanner"><span class="ref-nav-icon">⊕</span><span>Add Card</span></a><a data-tab="prices" href="#prices"><span class="ref-nav-icon">▥</span><span>Compare Prices</span></a><a data-tab="grading" href="#grading"><span class="ref-nav-icon">✦</span><span>Grading Helper</span></a><a data-tab="market" href="#market"><span class="ref-nav-icon">↗</span><span>Market Trends</span></a><a aria-label="Leaderboards (planned feature)" data-go="rewards" data-tab="rewards" href="#rewards"><span class="ref-nav-icon">🏆</span><span>Leaderboards</span></a><a data-tab="rewards" href="#rewards"><span class="ref-nav-icon">🏆</span><span>Rewards</span></a><a data-tab="features" href="#features"><span class="ref-nav-icon">⚙</span><span>Settings</span></a></div></nav><main><section class="tq-page" id="tq-home"><div class="ref-hero"><div class="ref-hero-avatar"><div class="tq-profile ref-avatar"><div class="tq-profile-ring"><img alt="Your collector profile" hidden="" id="tq-profile-image"/><span id="tq-profile-placeholder">🧢</span></div><div class="tq-profile-name">YOUR COLLECTOR AVATAR</div><div class="tq-profile-actions"><label class="tq-mini-btn" for="tq-profile-upload">⬆ Upload photo<input accept="image/*" hidden="" id="tq-profile-upload" type="file"/></label><label class="tq-mini-btn" for="tq-profile-camera">📷 Take photo<input accept="image/*" capture="user" hidden="" id="tq-profile-camera" type="file"/></label></div><label class="tq-animate-switch"><input id="tq-profile-animate" type="checkbox"/> ✨ Animate my avatar</label><button class="tq-remove" id="tq-profile-remove" type="button">Remove photo</button><p class="tq-profile-help">Photo stays on this device. Animation adds motion and glow; cartoon/AI art conversion is not included yet.</p></div></div><div class="ref-banner-slogan">Collect<br/>Scan<br/>Track<br/>Grow <span>♛</span></div></div>
 <div class="ref-quick">
 <button data-go="scanner"><span class="ref-icon">📷</span><span><b>Scan a Card</b><small>Identify, value, and add to your collection</small></span><span class="ref-arrow">›</span></button>
@@ -532,20 +543,15 @@ window.tcgQuestCompareCard=function(q,options={}){if(typeof q!=='string'||!q.tri
 .tq-tabs a{font-size:0!important;}
 .ref-quick>button,.ref-bottom>button{cursor:pointer!important;}
 </style>
-<script id="tq-remove-duplicate-home">
-/* Some prior homepage upgrades inserted an additional Home link at runtime.
-   Remove only redundant Home navigation links, not any other controls. */
-(function(){
- function normalize(){
-  const tabs=document.getElementById('tq-tabs');if(!tabs)return;
-  const homeLinks=Array.from(tabs.querySelectorAll('a')).filter(a=>a.getAttribute('data-tab')==='home'||(a.getAttribute('href')==='#home'&&a.textContent.trim()==='Home'));
-  homeLinks.slice(1).forEach(a=>a.remove());
-  const links=Array.from(tabs.querySelectorAll(':scope > a'));
-  links.forEach((a,i)=>{if(i<9){a.style.setProperty('background-image',`url("nav-${i+1}.png")`,'important')}});
- }
- normalize();
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',normalize,{once:true});
- window.addEventListener('load',normalize,{once:true});
-})();
-</script>
-</body></html>
+
+<script id="tq-nav-integrity">(function(){
+ const nav=document.getElementById('tq-tabs');if(!nav)return;
+ const expected=[['home','#home'],['collection','#collection'],['scanner','#scanner'],['prices','#prices'],['grading','#grading'],['market','#market'],['leaderboards','#rewards'],['rewards','#rewards'],['features','#features']];
+ const original=Array.from(nav.querySelectorAll(':scope > a'));
+ const used=new Set();
+ const links=expected.map(([key,href])=>{
+  const link=original.find(a=>!used.has(a)&&((key==='leaderboards'&&a.getAttribute('aria-label')?.includes('Leaderboards'))||(key==='rewards'&&a.textContent.includes('Rewards')&&!a.getAttribute('aria-label')?.includes('Leaderboards'))||(key!=='leaderboards'&&key!=='rewards'&&a.dataset.tab===key)));
+  if(link)used.add(link);return link;
+ }).filter(Boolean);
+ if(links.length===9){nav.replaceChildren(...links);}
+})();</script></body></html>
