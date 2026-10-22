@@ -157,8 +157,18 @@ def measure(file):
              'This is not a PSA grade prediction.' if valid else
              'Printed border could not be located consistently. No centering percentages '
              'were calculated. Try a sharper, straight-on photo with even lighting.')
+    # Image quality indicators are NOT card condition or defect detection.
+    # Restrict metrics to the rectified card crop to avoid background bias.
+    quality_gray=cv2.cvtColor(clean_warp,cv2.COLOR_BGR2GRAY)
+    sharpness=float(cv2.Laplacian(quality_gray,cv2.CV_64F).var())
+    hsv=cv2.cvtColor(clean_warp,cv2.COLOR_BGR2HSV)
+    glare_fraction=float(np.mean((hsv[:,:,2]>246)&(hsv[:,:,1]<42)))
+    quality={'sharpness_score':round(sharpness,1),
+             'possible_glare_percent':round(glare_fraction*100,1),
+             'sharpness_flag':'review' if sharpness<65 else 'ok',
+             'glare_flag':'review' if glare_fraction>.07 else 'ok'}
     return {'horizontal':horizontal,'vertical':vertical,'border_pixels':borders,
-            'confidence':confidence,'annotated':annotated,'clean_image':clean_image,'auto_corners':auto_corners,'warning':warning}
+            'confidence':confidence,'photo_quality':quality,'annotated':annotated,'clean_image':clean_image,'auto_corners':auto_corners,'warning':warning}
 
 @app.get('/')
 def home(): return send_from_directory('.','index.html')

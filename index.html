@@ -35,10 +35,12 @@ function createEditor(side,data){
  const p=data.border_pixels||{};
  if(['left','right','top','bottom'].every(k=>Number.isFinite(p[k]))){state.l=p.left;state.r=599-p.right;state.t=p.top;state.b=839-p.bottom;}
  const initial=JSON.parse(JSON.stringify(state));
+ let verified=false;
  const metrics=document.createElement('div');metrics.className='metrics';const lr=document.createElement('div'),tb=document.createElement('div');lr.className=tb.className='metric';metrics.append(lr,tb);outer.append(metrics);
  const warning=document.createElement('p');warning.className='tq-warn';warning.textContent='Manual estimate only. Initial yellow positions may be placeholders. Align ALL six edges before using results. Not a PSA grade.';outer.append(warning);
  const controls=document.createElement('div');controls.className='tq-controls';
- const reset=document.createElement('button');reset.type='button';reset.textContent='↺ Reset to automatic';reset.onclick=()=>{state=JSON.parse(JSON.stringify(initial));render()};controls.append(reset);
+ const confirm=document.createElement('label');confirm.className='tq-help';confirm.style.display='block';const check=document.createElement('input');check.type='checkbox';confirm.append(check,document.createTextNode(' I checked the green outside edges and all four yellow printed-border lines.'));outer.append(confirm);check.addEventListener('change',()=>{verified=check.checked;render()});
+ const reset=document.createElement('button');reset.type='button';reset.textContent='↺ Reset to automatic';reset.onclick=()=>{state=JSON.parse(JSON.stringify(initial));verified=false;check.checked=false;render()};controls.append(reset);
  const instructions=document.createElement('button');instructions.type='button';instructions.textContent='How to adjust';instructions.onclick=()=>alert('GREEN: move each of the four corner dots to the physical card corner. YELLOW: drag the left, right, top, and bottom lines to the printed border. Results recalculate immediately. Use front and back separately.');controls.append(instructions);outer.append(controls);
  let active=null;
  function line(x1,y1,x2,y2,color,kind,index){
@@ -59,6 +61,9 @@ function createEditor(side,data){
   const valid=left+3<state.l&&state.l+3<state.r&&state.r+3<right&&top+3<state.t&&state.t+3<state.b&&state.b+3<bottom;
   lr.innerHTML='<small>Left / Right</small><strong>'+ (valid?pct(state.l-left,right-state.r):'Adjust lines')+'</strong>';
   tb.innerHTML='<small>Top / Bottom</small><strong>'+ (valid?pct(state.t-top,bottom-state.b):'Adjust lines')+'</strong>';
+  const horiz=valid?[100*(state.l-left)/(state.l-left+right-state.r),100*(right-state.r)/(state.l-left+right-state.r)]:null;
+  const vert=valid?[100*(state.t-top)/(state.t-top+bottom-state.b),100*(bottom-state.b)/(state.t-top+bottom-state.b)]:null;
+  window.dispatchEvent(new CustomEvent('tq-centering-change',{detail:{side,verified:verified&&valid,horizontal:horiz,vertical:vert}}));
   warning.textContent=valid?'User-adjusted pixel estimate (not calibrated or PSA-certified). Confirm both green and yellow positions visually before relying on the ratios.':'Yellow frame lines must stay inside the green card edges. Adjust the lines to continue.';
  }
  const position=e=>{let box=svg.getBoundingClientRect();return [clamp((e.clientX-box.left)*600/box.width,0,599),clamp((e.clientY-box.top)*840/box.height,0,839)]};
@@ -78,4 +83,58 @@ form.addEventListener('submit',async e=>{
 },true);
 })();
 
+</script><script>
+/* Unofficial condition assistant. No learned model, PSA affiliation or guaranteed grade. */
+(()=>{
+const style=document.createElement('style');style.textContent=`
+.tq-grade{margin:22px 0;padding:22px;border:1px solid #9e77ff77;border-radius:18px;background:#151b32}
+.tq-grade h3{margin:0 0 9px;color:#d5c3ff}.tq-grade .sub{color:#b9c4da;font-size:13px;line-height:1.6}
+.tq-grade-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.tq-grade label{display:block;font-size:13px;color:#d7e1f2}.tq-grade select{display:block;width:100%;margin-top:7px;background:#090f21;color:#fff;border:1px solid #67728c;border-radius:9px;padding:10px}
+.tq-grade-result{background:#0b1225;border:1px solid #67728c;border-radius:12px;padding:17px;margin-top:15px;line-height:1.6}
+.tq-grade-result strong{color:#66ffc1;font-size:24px}.tq-grade button{margin-top:10px;background:#66ffc1;border:0;border-radius:9px;padding:11px 15px;font-weight:800;cursor:pointer}
+@media(max-width:700px){.tq-grade-grid{grid-template-columns:1fr}}
+`;document.head.append(style);
+const scores={unknown:null,excellent:9,minor:7,visible:5,major:2};
+const state={front:null,back:null};let qualities={};
+const container=document.createElement('section');container.className='tq-grade';container.id='tq-grading';
+container.innerHTML=`<h3>🔬 Unofficial Condition & Grade Assistant</h3>
+<p class="sub">Computer vision helps measure centering and flag potentially blurry/glary photos. You review visible corner, edge and surface condition. The estimate below is a <b>rules-based educational range</b>, not a trained AI prediction, professional inspection or PSA grade. Hidden defects, authenticity and print quality cannot be assessed.</p>
+<div id="tq-photo-quality" class="sub">Upload and scan front and back photos to begin.</div>
+<div class="tq-grade-grid" id="tq-grade-inputs"></div>
+<div class="tq-grade-result" id="tq-grade-output" aria-live="polite">Scan both sides, verify the green/yellow lines, and assess condition to see a provisional range.</div>
+<button type="button" id="tq-grade-recalc">Recalculate estimate</button>`;
+const result=document.getElementById('result');result.append(container);
+const names=[['corners','Corners'],['edges','Edges'],['surface','Surface']];
+const grid=container.querySelector('#tq-grade-inputs');
+for(const [key,label] of names){const field=document.createElement('label');field.textContent=label+' (both sides)';const select=document.createElement('select');select.id='tq-condition-'+key;
+for(const [value,text] of [['unknown','Select observed condition'],['excellent','No visible damage under close inspection'],['minor','Minor wear or tiny imperfections'],['visible','Noticeable wear / scratches / whitening'],['major','Major wear, creases or damage']]){const o=document.createElement('option');o.value=value;o.textContent=text;select.append(o)}field.append(select);grid.append(field);select.addEventListener('change',recalculate)}
+const out=container.querySelector('#tq-grade-output');
+function recalculate(){
+const values=names.map(([key])=>scores[document.getElementById('tq-condition-'+key).value]);
+if(!state.front||!state.back){out.textContent='Scan both sides of the card to estimate a range. No grade has been calculated.';return}
+if(!state.front.verified||!state.back.verified){out.textContent='Confirm the green card edges and yellow printed borders on BOTH front and back first. Centering must be verified before estimating.';return}
+if(values.some(v=>v===null)){out.textContent='Choose an observed condition for corners, edges and surface. No estimate until all are assessed.';return}
+const sides=[state.front,state.back];
+if(sides.some(s=>!s.horizontal||!s.vertical)){out.textContent='Centering unavailable. Adjust the lines before estimating.';return}
+// Asymmetry is maximum departure from 50% on any measured axis/side.
+const asym=Math.max(...sides.flatMap(s=>[Math.abs(s.horizontal[0]-50),Math.abs(s.vertical[0]-50)]));
+// Conservative illustrative heuristic; not PSA thresholds or learned probabilities.
+let centeringCeiling=asym<=5?10:asym<=10?9:asym<=15?8:asym<=20?7:asym<=25?6:5;
+let conditionCeiling=Math.min(...values)+1;
+let ceiling=Math.min(10,centeringCeiling,conditionCeiling);
+const floor=Math.max(1,ceiling-2);
+const poor=Object.values(qualities).some(q=>q&&(q.sharpness_flag==='review'||q.glare_flag==='review'));
+out.replaceChildren();const heading=document.createElement('strong');heading.textContent='Illustrative grade range: '+floor+'–'+ceiling+' / 10';out.append(heading);
+const text=document.createElement('p');text.textContent='Based on your verified centering positions and self-reported condition. Worst centering departure: '+asym.toFixed(1)+' percentage points from 50/50. This is a simple heuristic, not a calibrated PSA prediction.';out.append(text);
+if(poor){const warn=document.createElement('p');warn.textContent='⚠ Photo-quality warning: possible blur or glare may conceal defects. Retake photos before relying on this estimate.';out.append(warn)}
+const caveat=document.createElement('small');caveat.textContent='Actual professional grading may be higher or lower. Surface scratches, print lines, dents, authenticity and hidden defects require further inspection.';out.append(caveat);
+}
+container.querySelector('#tq-grade-recalc').addEventListener('click',recalculate);
+window.addEventListener('tq-centering-change',e=>{state[e.detail.side]=e.detail;recalculate()});
+const form=document.getElementById('form');form.addEventListener('submit',async()=>{state.front=null;state.back=null;qualities={};out.textContent='Analyzing photos…';},false);
+// Read image quality from the same backend response without duplicating requests.
+const nativeFetch=window.fetch.bind(window);
+window.fetch=async (...args)=>{const response=await nativeFetch(...args);if(String(args[0]).includes('/api/measure')&&response.ok){response.clone().json().then(data=>{qualities={front:data.front?.photo_quality,back:data.back?.photo_quality};const q=container.querySelector('#tq-photo-quality');q.textContent=['front','back'].filter(side=>qualities[side]).map(side=>{const v=qualities[side];return side.toUpperCase()+': focus '+(v.sharpness_flag==='review'?'needs review':'appears acceptable')+', possible glare '+v.possible_glare_percent+'%';}).join(' | ')+' (Photo quality is not a condition grade.)';recalculate()}).catch(()=>{})}return response};
+})();
 </script></body></html>
