@@ -171,23 +171,57 @@ window.fetch=async (...args)=>{const response=await nativeFetch(...args);if(Stri
 const scanner=document.querySelector('#scanner .scanner');if(!scanner)return;
 const section=document.createElement('section');section.className='tq-identify';section.id='tq-identification';
 section.innerHTML=`<h3>🃏 Identify Your Card from a Photo</h3>
-<p>Supports Pokémon, One Piece and sports card photos. Uses AI image recognition when configured. Results are suggestions, not verified catalog matches; check the set, number and variant.</p>
+<p>Supports Pokémon, One Piece and sports card photos. Automatically identifies your front photo when AI is configured. Results are suggestions, not verified catalog matches; check the set, number and variant.</p>
 <div id="tq-id-status" class="note">Checking photo identification availability…</div>
-<div class="tq-id-actions"><button type="button" id="tq-id-btn">🔎 IDENTIFY FRONT PHOTO</button></div>
-<div class="tq-id-output" id="tq-id-output" aria-live="polite">Upload a front photo above, then select Identify Front Photo.</div>`;
+<div class="tq-id-actions"><button type="button" id="tq-id-btn">🔎 RETRY IDENTIFICATION</button></div>
+<div class="tq-id-output" id="tq-id-output" aria-live="polite">Upload a front photo to identify it automatically and fill marketplace searches.</div>`;
 const form=document.getElementById('form');form.after(section);
 const status=section.querySelector('#tq-id-status'),output=section.querySelector('#tq-id-output'),btn=section.querySelector('#tq-id-btn');
-fetch('/api/identify/status').then(r=>r.json()).then(d=>{status.textContent=d.available?'● Photo identification connected. Each scan uses an external AI API and may incur charges.':'○ Photo identification needs an API key. Add OPENAI_API_KEY to Render Environment to enable it.';btn.disabled=!d.available}).catch(()=>{status.textContent='Identification service unavailable';btn.disabled=true});
-btn.addEventListener('click',async()=>{
-const file=form.querySelector('input[name="front"]')?.files?.[0];if(!file){output.textContent='Upload a front photo first.';return}
-btn.disabled=true;output.textContent='Examining the card photo…';
-try{const fd=new FormData();fd.append('front',file);const response=await fetch('/api/identify',{method:'POST',body:fd});const d=await response.json();if(!response.ok)throw Error(d.error||'Identification failed');
-output.replaceChildren();const title=document.createElement('strong');title.textContent=(d.name||'Unknown card')+' — '+d.category;output.append(title);
-for(const [label,value] of [['Set',d.set],['Card number',d.number],['Year',d.year],['Variant',d.variant],['Confidence',d.confidence],['Visible clues',d.evidence],['Review',d.caveat]]){if(value){const row=document.createElement('div');row.textContent=label+': '+value;output.append(row)}}
-const note=document.createElement('p');note.textContent=d.disclaimer;output.append(note);
-if(d.name){const compareBtn=document.createElement('button');compareBtn.type='button';compareBtn.textContent='💰 Compare prices for this card';compareBtn.addEventListener('click',()=>window.tcgQuestCompareCard?.([d.name,d.number,d.set,d.variant].filter(Boolean).join(' ')));output.append(compareBtn);const action=document.createElement('button');action.type='button';action.textContent='Use name in My Collection';action.addEventListener('click',()=>{const input=document.getElementById('cardName');if(input){input.value=[d.name,d.number,d.set].filter(Boolean).join(' · ');document.getElementById('collection')?.scrollIntoView({behavior:'smooth'});}else{navigator.clipboard?.writeText(d.name)}});output.append(action)}
-}catch(e){output.textContent=e.message}finally{btn.disabled=false}
+const photoInput=form.querySelector('input[name="front"]');
+let enabled=false, sequence=0, activeController=null, lastFile=null;
+const compose=d=>[d.name,d.number,d.set,d.variant].filter(v=>typeof v==='string'&&v.trim()).join(' ').trim();
+function sendToPrices(q){if(!q)return;window.tcgQuestCompareCard?.(q,{scroll:false});}
+async function identify(file){
+ if(!file)return;
+ const current=++sequence;
+ if(activeController)activeController.abort();
+ activeController=new AbortController();
+ btn.disabled=true;
+ output.textContent='Identifying your card and preparing marketplace searches…';
+ try{
+  const fd=new FormData();fd.append('front',file);
+  const response=await fetch('/api/identify',{method:'POST',body:fd,signal:activeController.signal});
+  const d=await response.json();if(!response.ok)throw Error(d.error||'Identification failed');
+  if(current!==sequence)return;
+  output.replaceChildren();
+  const title=document.createElement('strong');title.textContent=(d.name||'Unknown card')+' — '+(d.category||'Unknown category');output.append(title);
+  for(const [label,value] of [['Set',d.set],['Card number',d.number],['Year',d.year],['Variant',d.variant],['Confidence',d.confidence],['Visible clues',d.evidence],['Review',d.caveat]]){
+   if(value){const row=document.createElement('div');row.textContent=label+': '+value;output.append(row)}
+  }
+  const note=document.createElement('p');note.textContent=d.disclaimer||'Confirm the exact card and variant before relying on price searches.';output.append(note);
+  if(d.name){
+   const q=compose(d);sendToPrices(q);
+   const confirmation=document.createElement('p');confirmation.textContent='✓ Marketplace searches filled automatically. Review the identification and edit the search if needed.';output.append(confirmation);
+   const compareBtn=document.createElement('button');compareBtn.type='button';compareBtn.textContent='💰 View price comparison';compareBtn.addEventListener('click',()=>window.tcgQuestCompareCard?.(q,{scroll:true}));output.append(compareBtn);
+   const action=document.createElement('button');action.type='button';action.textContent='Use name in My Collection';action.addEventListener('click',()=>{const input=document.getElementById('cardName');if(input){input.value=[d.name,d.number,d.set].filter(Boolean).join(' · ');document.getElementById('collection')?.scrollIntoView({behavior:'smooth'})}});output.append(action);
+  }else{output.append(document.createTextNode(' Could not identify this card. Enter its name manually in Compare Card Prices.'))}
+ }catch(e){if(current!==sequence||e.name==='AbortError')return;output.textContent='Automatic identification unavailable: '+e.message+'. You can enter the card name manually in Compare Card Prices.'}
+ finally{if(current===sequence){btn.disabled=!enabled;activeController=null}}
+}
+// The front photo triggers identification immediately, without requiring Analyze or Identify buttons.
+photoInput?.addEventListener('change',()=>{
+ const file=photoInput.files?.[0];if(!file)return;
+ if(file===lastFile)return;lastFile=file;
+ if(!enabled){output.textContent='Automatic card identification needs OPENAI_API_KEY in Render. You can still search prices manually.';return}
+ identify(file);
 });
+btn.addEventListener('click',()=>{const file=photoInput?.files?.[0];if(!file){output.textContent='Upload a front photo first.';return}identify(file)});
+fetch('/api/identify/status').then(r=>r.json()).then(d=>{
+ enabled=!!d.available;
+ status.textContent=enabled?'● Auto-identification enabled. Uploading a front photo starts an AI request (API charges may apply).':'○ Auto-identification requires OPENAI_API_KEY in Render. Manual price searches remain available.';
+ btn.disabled=!enabled;
+ if(enabled&&photoInput?.files?.[0]){lastFile=photoInput.files[0];identify(lastFile)}
+}).catch(()=>{status.textContent='Identification service unavailable; use manual price search.';btn.disabled=true});
 })();
 </script>
 <style>.tq-market-controls{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}.tq-market-controls label{flex:1;min-width:170px;color:#c8d0e7;font-size:13px}.tq-market-controls select{display:block;width:100%;margin-top:7px;background:#090e1e;border:1px solid #66708f;border-radius:10px;color:white;padding:12px}.tq-market-summary{font-weight:700;color:#66ffc1;margin:15px 0}.tq-market-links{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 20px}.tq-market-links a{color:#a9ddff;border:1px solid #66708f;border-radius:9px;padding:10px 12px;text-decoration:none}</style><script>
@@ -219,7 +253,7 @@ const sources=[{name:'eBay',base:'https://www.ebay.com/sch/i.html?_nkw=',hint:'A
 function tile(src,q){const a=document.createElement('a');a.className='tq-price-tile';a.target='_blank';a.rel='noopener noreferrer';a.href=src.base+encodeURIComponent(q);const name=document.createElement('b');name.textContent=src.name+' ↗';const price=document.createElement('strong');price.textContent='View prices';const hint=document.createElement('small');hint.textContent=src.hint;a.append(name,price,hint);grid.append(a);return {a,price,hint}}
 async function compare(q){grid.replaceChildren();const tiles=sources.map(src=>tile(src,q));tiles[0].price.textContent='Checking…';try{const r=await fetch('/api/market/search?'+new URLSearchParams({q,source:'ebay'}));const data=await r.json();if(!r.ok)throw Error(data.error||'eBay lookup unavailable');const valid=(data.items||[]).filter(x=>x.price!==null&&Number.isFinite(Number(x.price))&&Number(x.price)>=0&&(!x.currency||x.currency==='USD'));if(!valid.length){tiles[0].price.textContent='No prices found';return}const cheapest=valid.reduce((a,b)=>Number(a.price)<=Number(b.price)?a:b);tiles[0].price.textContent='From '+new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(cheapest.price));tiles[0].hint.textContent='Lowest of '+valid.length+' returned listings · may be a different variant';if(cheapest.url&&/^https:\/\/(www\.)?ebay\.com\//i.test(cheapest.url)){tiles[0].a.href=cheapest.url;tiles[0].hint.textContent+=' · Open lowest listing'}}catch(e){tiles[0].price.textContent='See eBay';tiles[0].hint.textContent='Live quote unavailable · open eBay search'}}
 form.addEventListener('submit',e=>{e.preventDefault();const q=input.value.trim();if(q.length>1)compare(q)});
-window.tcgQuestCompareCard=function(q){if(typeof q!=='string'||!q.trim())return;input.value=q;compare(q);panel.scrollIntoView({behavior:'smooth',block:'start'})};
+window.tcgQuestCompareCard=function(q,options={}){if(typeof q!=='string'||!q.trim())return;input.value=q;compare(q);if(options.scroll!==false)panel.scrollIntoView({behavior:'smooth',block:'start'})};
 })();
 </script>
 </body></html>
