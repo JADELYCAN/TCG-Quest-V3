@@ -566,6 +566,7 @@ window.tcgQuestCompareCard=function(q,options={}){if(typeof q!=='string'||!q.tri
 <script id="tq-nav-integrity">(function(){
  const nav=document.getElementById('tq-tabs');if(!nav)return;
  const expected=[['home','#home'],['collection','#collection'],['scanner','#scanner'],['prices','#prices'],['grading','#grading'],['market','#market'],['leaderboards','#rewards'],['rewards','#rewards'],['features','#features']];
+ const homeLinks=Array.from(nav.querySelectorAll(':scope > a')).filter(a=>a.dataset.tab==='home');homeLinks.slice(1).forEach(a=>a.remove());
  const original=Array.from(nav.querySelectorAll(':scope > a'));
  const used=new Set();
  const links=expected.map(([key,href])=>{
@@ -603,7 +604,7 @@ const faceStyle=document.createElement('style');faceStyle.textContent=`
 #identity-panel button:disabled{opacity:.5;cursor:wait}
 #identity-preview{align-items:center}
 #identity-banner-motion{position:absolute;inset:0;pointer-events:none;z-index:2;box-shadow:inset 0 0 16px #16ffb92e}
-.ref-hero.identity-animated{animation:identity-banner-float 3.5s ease-in-out infinite alternate;filter:drop-shadow(0 0 10px #00e9b14a)}
+.ref-hero.identity-animated{animation:none!important;filter:none!important}
 @keyframes identity-banner-float{to{transform:translateY(-4px);filter:drop-shadow(0 0 18px #00e9b18c)}}
 @media(prefers-reduced-motion:reduce){.ref-hero.identity-animated{animation:none}}
 .identity-privacy{font-size:12px!important}
@@ -627,31 +628,56 @@ state.image=body.image;save();$('identity-message').textContent='Your cartoon ch
 fetch('/api/avatar/status').then(r=>r.json()).then(x=>{available=!!x.available;$('identity-message').textContent=available?'AI cartoon generator ready. Upload a selfie to begin.':'To enable AI generation, add OPENAI_API_KEY to Render environment variables.'}).catch(()=>{$('identity-message').textContent='Could not reach AI image service.'});
 render();
 })();</script><style id="tq-manual-collector-style">
-#tq-manual-avatar-preview{width:190px;height:220px;max-width:100%;background:radial-gradient(circle at 50% 40%,#234f80,#09182d 72%);border:1px solid #2d92c8;border-radius:18px;display:grid;place-items:center;overflow:hidden}
+#tq-manual-avatar-preview{width:210px;height:235px;max-width:100%;background:radial-gradient(circle at 50% 40%,#234f80,#09182d 72%);border:1px solid #2d92c8;border-radius:18px;display:grid;place-items:center;overflow:hidden}
 #tq-manual-avatar-preview svg{width:100%;height:100%}
 #tq-manual-avatar-row{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:15px}
 #tq-manual-avatar-actions{display:flex;flex-direction:column;gap:9px;max-width:350px}
 #tq-manual-avatar-actions button{padding:11px 14px;border-radius:9px;border:1px solid #37bbfa;background:#073e68;color:#fff;cursor:pointer;font-weight:700}
-#tq-manual-banner-avatar{display:none;position:absolute;left:50%;top:0;transform:translateX(-50%);height:100%;width:auto;aspect-ratio:190/220;z-index:3;pointer-events:none;filter:drop-shadow(0 0 10px #000a)}
+#tq-manual-banner-avatar{display:none;position:absolute;left:43%;top:4%;transform:translateX(-50%);height:77%;width:auto;aspect-ratio:190/220;z-index:3;pointer-events:none;filter:drop-shadow(0 2px 12px #000b)}
 #tq-manual-banner-avatar svg{height:100%;width:100%}
 #tq-manual-banner-avatar.is-visible{display:block}
 #tq-manual-banner-avatar.is-floating svg{animation:tq-manual-bob 3.4s ease-in-out infinite alternate;filter:drop-shadow(0 0 9px #31ffc6)}
 @keyframes tq-manual-bob{to{transform:translateY(-5px);filter:drop-shadow(0 0 20px #31ffc6)}}
 @media(prefers-reduced-motion:reduce){#tq-manual-banner-avatar.is-floating svg{animation:none}}
+.tq-tabs>a[data-tab="home"]~a[data-tab="home"]{display:none!important}
 </style>
 <script id="tq-manual-collector-script">(()=>{
 'use strict';
 const panel=document.getElementById('identity-panel'), banner=document.querySelector('.ref-hero');if(!panel||!banner)return;
 const KEY='tcgquest-collector-manual-v1';
-const colors={Green:'#158b5a',Blue:'#176cbb',Red:'#bf3448',Black:'#263346',Orange:'#e27625'};
+const colors={Green:'#158b5a',Blue:'#176cbb',Red:'#bf3448',Black:'#263346',Orange:'#e27625',Purple:'#7842ca',White:'#e8edf5'};
 const safeColor=name=>colors[name]||colors.Green;
 const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return {}}};
 let state={hat:'Baseball cap',hatColor:'Green',clothing:'Hoodie',clothingColor:'Green',motion:true,show:false,...read()};
 const row=document.createElement('div');row.id='tq-manual-avatar-row';
-row.innerHTML='<div id="tq-manual-avatar-preview" role="img" aria-label="Live cartoon collector preview"></div><div id="tq-manual-avatar-actions"><strong>Instant cartoon collector — no AI credits required</strong><span>Choose a hat, clothing and colors above. Your cartoon updates immediately.</span><button id="tq-manual-show" type="button"></button><small>This is a preset illustration layered over the center of the banner, not a selfie-based likeness or a seamless AI edit.</small></div>';
+row.innerHTML='<div id="tq-manual-avatar-preview" role="img" aria-label="Live cartoon collector preview"></div><div id="tq-manual-avatar-actions"><strong>Anime-style collector — instant preview, no AI credits required</strong><span>Choose a hat, clothing and colors above. Your cartoon updates immediately.</span><button id="tq-manual-show" type="button"></button><small>The preset is layered over the original banner; the original character remains embedded in the image.</small></div>';
 const preview=panel.querySelector('#identity-preview');preview.after(row);
 const layer=document.createElement('div');layer.id='tq-manual-banner-avatar';banner.append(layer);
-function svg(){const hat=safeColor(state.hatColor),cloth=safeColor(state.clothingColor),hoodie=state.clothing==='Hoodie',jersey=state.clothing==='Jersey',nohat=state.hat==='No hat',beanie=state.hat==='Beanie';return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 220" aria-hidden="true"><defs><linearGradient id="skin" x2="0" y2="1"><stop stop-color="#eec5a2"/><stop offset="1" stop-color="#b97755"/></linearGradient></defs><ellipse cx="95" cy="210" rx="75" ry="9" fill="#000" opacity=".3"/><path d="M17 220 Q19 153 64 149 L126 149 Q172 154 174 220" fill="${cloth}" stroke="#102c40" stroke-width="5"/><path d="M72 151 L95 176 L118 151" fill="${hoodie?'#23493e':'#eee'}" opacity=".8"/><path d="M78 135 L78 158 Q95 177 112 158 L112 135" fill="url(#skin)"/><ellipse cx="95" cy="96" rx="48" ry="57" fill="url(#skin)" stroke="#7e4934" stroke-width="2"/><path d="M48 94 Q42 40 95 38 Q151 40 142 94 L134 69 Q97 48 55 70Z" fill="#2d2524"/><ellipse cx="79" cy="101" rx="4" ry="5" fill="#1b2530"/><ellipse cx="111" cy="101" rx="4" ry="5" fill="#1b2530"/><path d="M94 108 l-4 13 h8" fill="none" stroke="#9e6248" stroke-width="2"/><path d="M80 134 Q95 145 111 134" fill="none" stroke="#773d3a" stroke-width="3" stroke-linecap="round"/>${nohat?'':beanie?`<path d="M49 75 Q46 25 95 20 Q145 25 141 75 Z" fill="${hat}" stroke="#13283a" stroke-width="4"/><rect x="47" y="65" width="96" height="20" rx="8" fill="${hat}" stroke="#13283a" stroke-width="3"/>`:`<path d="M44 76 Q40 24 95 28 Q151 24 146 76 L145 84 L45 84Z" fill="${hat}" stroke="#13283a" stroke-width="4"/><path d="M91 81 Q145 72 162 88 Q145 99 92 91" fill="${hat}" stroke="#13283a" stroke-width="3"/><path d="M82 51 L95 44 L108 51 L95 61Z" fill="#c4ff51"/>`}${hoodie?`<path d="M65 150 Q45 157 50 196 M125 150 Q145 157 140 196" fill="none" stroke="#0b3d37" stroke-width="5"/><path d="M85 175 L83 210 M105 175 L107 210" stroke="#ddd" stroke-width="2"/>`:jersey?`<path d="M64 153 L95 182 L126 153" fill="none" stroke="#f4f4f4" stroke-width="5"/><text x="95" y="211" text-anchor="middle" font-size="24" font-family="sans-serif" font-weight="900" fill="#fff">10</text>`:`<path d="M70 152 Q95 170 120 152" fill="none" stroke="#eee" stroke-width="3"/>`}</svg>`}
+function svg(){
+const hat=safeColor(state.hatColor), cloth=safeColor(state.clothingColor);
+const hoodie=state.clothing==='Hoodie', jersey=state.clothing==='Jersey', nohat=state.hat==='No hat', beanie=state.hat==='Beanie';
+return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 220" aria-hidden="true"><defs>
+<linearGradient id="animeSkin" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#ffe0b7"/><stop offset=".55" stop-color="#e9ad80"/><stop offset="1" stop-color="#b96e56"/></linearGradient>
+<linearGradient id="animeFabric" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${cloth}"/><stop offset="1" stop-color="#101c35"/></linearGradient>
+<linearGradient id="animeHat" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${hat}"/><stop offset="1" stop-color="#17283a"/></linearGradient>
+<linearGradient id="animeEyes" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#46e4ff"/><stop offset="1" stop-color="#1653a5"/></linearGradient>
+</defs>
+<path d="M5 220 Q7 157 51 151 L77 143 114 143 145 151 Q182 163 187 220Z" fill="url(#animeFabric)" stroke="#081a30" stroke-width="5"/>
+<path d="M40 163 Q23 188 24 220 M151 161 Q167 183 166 220" fill="none" stroke="#84dcff" stroke-opacity=".55" stroke-width="3"/>
+<path d="M77 136 L78 155 Q95 173 113 154 L113 134" fill="url(#animeSkin)" stroke="#743f38" stroke-width="2"/>
+<path d="M49 86 Q37 36 92 30 Q149 34 145 91 L137 121 Q124 154 94 159 Q65 152 52 121Z" fill="url(#animeSkin)" stroke="#502b2d" stroke-width="3"/>
+<path d="M46 96 Q32 58 49 41 L69 28 90 32 111 25 137 41 Q155 64 145 96 L138 69 125 63 117 74 100 60 81 74 70 64 54 83Z" fill="#2a1c23" stroke="#0b182a" stroke-width="3"/>
+<path d="M55 87 Q69 76 83 85 M106 85 Q120 76 136 85" fill="none" stroke="#30202b" stroke-width="5" stroke-linecap="round"/>
+<path d="M56 92 Q69 82 84 94 Q70 108 56 92Z M105 94 Q120 82 135 92 Q120 108 105 94Z" fill="#fff" stroke="#34222a" stroke-width="2"/>
+<ellipse cx="71" cy="94" rx="7" ry="9" fill="url(#animeEyes)"/><ellipse cx="119" cy="94" rx="7" ry="9" fill="url(#animeEyes)"/>
+<ellipse cx="73" cy="92" rx="2.6" ry="3.5" fill="#fff"/><ellipse cx="121" cy="92" rx="2.6" ry="3.5" fill="#fff"/>
+<path d="M95 100 L89 118 Q96 121 102 117" fill="none" stroke="#b36c56" stroke-width="2" stroke-linecap="round"/>
+<path d="M77 132 Q95 146 114 129 Q96 136 77 132Z" fill="#6e343a"/><path d="M83 132 Q95 137 109 131" stroke="#fff" stroke-width="2" fill="none"/>
+<path d="M51 115 l-9 -6 M136 115 l9 -6" stroke="#f3bb8c" stroke-width="3"/>
+${nohat?'':beanie?`<path d="M44 76 Q40 18 95 18 Q150 20 146 77Z" fill="url(#animeHat)" stroke="#081a30" stroke-width="4"/><path d="M45 69 Q96 60 145 69 L146 83 Q96 77 44 83Z" fill="${hat}" stroke="#0b1a2d" stroke-width="3"/>`:`<path d="M42 75 Q40 22 93 24 Q151 24 148 79 L43 84Z" fill="url(#animeHat)" stroke="#09192a" stroke-width="4"/><path d="M45 76 Q94 67 153 79 Q166 84 159 89 Q106 98 42 87Z" fill="${hat}" stroke="#09192a" stroke-width="3"/><path d="M87 47 L95 40 L103 47 L95 56Z" fill="#caff49" stroke="#0b2233" stroke-width="2"/>`}
+${hoodie?`<path d="M57 151 Q40 167 48 201 L72 162 M133 151 Q150 167 142 201 L118 162" fill="none" stroke="#0a2133" stroke-width="7"/><path d="M76 152 Q95 181 114 152" fill="none" stroke="#b5e8fa" stroke-width="4"/><path d="M88 176 L86 206 M103 176 L106 206" stroke="#fff" stroke-width="2"/>`:jersey?`<path d="M68 152 L95 178 L123 152" fill="none" stroke="#f8faff" stroke-width="6"/><path d="M48 176 L62 180 M142 180 L157 176" stroke="#f8faff" stroke-width="4"/><text x="95" y="210" font-family="sans-serif" font-size="25" font-weight="900" text-anchor="middle" fill="white">10</text>`:`<path d="M73 153 Q95 173 117 153" fill="none" stroke="#d3efff" stroke-width="4"/><path d="M67 186 L124 186" stroke="#81d7ff" stroke-width="3"/>`}
+</svg>`;
+}
 function render(){const art=svg();document.getElementById('tq-manual-avatar-preview').innerHTML=art;layer.innerHTML=art;layer.classList.toggle('is-visible',!!state.show);layer.classList.toggle('is-floating',!!state.motion);document.getElementById('tq-manual-show').textContent=state.show?'Hide preset from banner':'Show preset on banner';}
 function update(){for(const k of ['hat','hatColor','clothing','clothingColor']){const e=document.getElementById('identity-'+k);if(e)state[k]=e.value}state.motion=!!document.getElementById('identity-motion')?.checked;try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}render()}
 for(const k of ['hat','hatColor','clothing','clothingColor','motion'])document.getElementById('identity-'+k)?.addEventListener('change',update);
