@@ -137,4 +137,36 @@ const form=document.getElementById('form');form.addEventListener('submit',async(
 const nativeFetch=window.fetch.bind(window);
 window.fetch=async (...args)=>{const response=await nativeFetch(...args);if(String(args[0]).includes('/api/measure')&&response.ok){response.clone().json().then(data=>{qualities={front:data.front?.photo_quality,back:data.back?.photo_quality};const q=container.querySelector('#tq-photo-quality');q.textContent=['front','back'].filter(side=>qualities[side]).map(side=>{const v=qualities[side];return side.toUpperCase()+': focus '+(v.sharpness_flag==='review'?'needs review':'appears acceptable')+', possible glare '+v.possible_glare_percent+'%';}).join(' | ')+' (Photo quality is not a condition grade.)';recalculate()}).catch(()=>{})}return response};
 })();
-</script></body></html>
+</script>
+<style>
+.tq-identify{margin:22px 0;padding:22px;border:1px solid #66ffc188;border-radius:18px;background:#121e30}
+.tq-identify h3{margin:0 0 8px;color:#66ffc1}.tq-identify p{color:#b9c4da;font-size:14px;line-height:1.5}
+.tq-identify button{border:0;border-radius:11px;background:#66ffc1;color:#06121a;font-weight:800;padding:13px 19px;cursor:pointer}
+.tq-identify button:disabled{opacity:.5;cursor:wait}.tq-id-output{margin-top:13px;padding:13px;background:#0a1021;border-radius:10px;white-space:pre-wrap;line-height:1.7}
+.tq-id-output strong{color:#66ffc1}.tq-id-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+</style>
+<script>
+(()=>{
+const scanner=document.querySelector('#scanner .scanner');if(!scanner)return;
+const section=document.createElement('section');section.className='tq-identify';section.id='tq-identification';
+section.innerHTML=`<h3>🃏 Identify Your Card from a Photo</h3>
+<p>Supports Pokémon, One Piece and sports card photos. Uses AI image recognition when configured. Results are suggestions, not verified catalog matches; check the set, number and variant.</p>
+<div id="tq-id-status" class="note">Checking photo identification availability…</div>
+<div class="tq-id-actions"><button type="button" id="tq-id-btn">🔎 IDENTIFY FRONT PHOTO</button></div>
+<div class="tq-id-output" id="tq-id-output" aria-live="polite">Upload a front photo above, then select Identify Front Photo.</div>`;
+const form=document.getElementById('form');form.after(section);
+const status=section.querySelector('#tq-id-status'),output=section.querySelector('#tq-id-output'),btn=section.querySelector('#tq-id-btn');
+fetch('/api/identify/status').then(r=>r.json()).then(d=>{status.textContent=d.available?'● Photo identification connected. Each scan uses an external AI API and may incur charges.':'○ Photo identification needs an API key. Add OPENAI_API_KEY to Render Environment to enable it.';btn.disabled=!d.available}).catch(()=>{status.textContent='Identification service unavailable';btn.disabled=true});
+btn.addEventListener('click',async()=>{
+const file=form.querySelector('input[name="front"]')?.files?.[0];if(!file){output.textContent='Upload a front photo first.';return}
+btn.disabled=true;output.textContent='Examining the card photo…';
+try{const fd=new FormData();fd.append('front',file);const response=await fetch('/api/identify',{method:'POST',body:fd});const d=await response.json();if(!response.ok)throw Error(d.error||'Identification failed');
+output.replaceChildren();const title=document.createElement('strong');title.textContent=(d.name||'Unknown card')+' — '+d.category;output.append(title);
+for(const [label,value] of [['Set',d.set],['Card number',d.number],['Year',d.year],['Variant',d.variant],['Confidence',d.confidence],['Visible clues',d.evidence],['Review',d.caveat]]){if(value){const row=document.createElement('div');row.textContent=label+': '+value;output.append(row)}}
+const note=document.createElement('p');note.textContent=d.disclaimer;output.append(note);
+if(d.name){const action=document.createElement('button');action.type='button';action.textContent='Use name in My Collection';action.addEventListener('click',()=>{const input=document.getElementById('cardName');if(input){input.value=[d.name,d.number,d.set].filter(Boolean).join(' · ');document.getElementById('collection')?.scrollIntoView({behavior:'smooth'});}else{navigator.clipboard?.writeText(d.name)}});output.append(action)}
+}catch(e){output.textContent=e.message}finally{btn.disabled=false}
+});
+})();
+</script>
+</body></html>

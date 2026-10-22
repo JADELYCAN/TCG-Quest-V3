@@ -214,4 +214,66 @@ def market_search():
         return jsonify(error='TCGplayer catalog/pricing requires approved API access and an integration adapted to the granted endpoints. No TCGplayer data is connected yet.'),503
     return jsonify(error='Unknown source'),400
 
+
+# Photo identification uses a configured vision API; no guesses are made without it.
+@app.get('/api/identify/status')
+def identify_status():
+    import os
+    return jsonify(available=bool(os.getenv('OPENAI_API_KEY')),note='Photo identification requires OPENAI_API_KEY on Render; API usage may incur charges.')
+
+@app.post('/api/identify')
+def identify_card():
+    import os, json, base64, urllib.request, urllib.error
+    key=os.getenv('OPENAI_API_KEY')
+    if not key:
+        return jsonify(error='Photo identification is not configured. Add OPENAI_API_KEY in Render Environment, then redeploy.'),503
+    uploaded=request.files.get('front')
+    if not uploaded: return jsonify(error='Upload a front photo first.'),400
+    raw=uploaded.read(6*1024*1024+1)
+    if len(raw)>6*1024*1024: return jsonify(error='Photo must be 6 MB or smaller.'),413
+    arr=np.frombuffer(raw,np.uint8)
+    img=cv2.imdecode(arr,cv2.IMREAD_COLOR)
+    if img is None: return jsonify(error='Please upload a valid image.'),422
+    h,w=img.shape[:2]
+    if max(h,w)>1200:
+        scale=1200/max(h,w)
+        img=cv2.resize(img,(max(1,int(w*scale)),max(1,int(h*scale))))
+    ok,encoded=cv2.imencode('.jpg',img,[cv2.IMWRITE_JPEG_QUALITY,82])
+    if not ok: return jsonify(error='Could not prepare image.'),422
+    data_url='data:image/jpeg;base64,'+base64.b64encode(encoded.tobytes()).decode('ascii')
+    instructions=('Identify this trading card from the front photo. Supported categories: Pokémon, One Piece, sports, or unknown. '
+        'Read only visible text and symbols. Never invent a player, set, card number, year, rarity or variant. '
+        'Return ONLY a JSON object with keys category, name, set, number, year, variant, confidence, evidence, caveat. '
+        'category must be one of Pokemon, One Piece, Sports, Unknown. '
+        'confidence must be high, medium, or low; use low for uncertain or unreadable images. '
+        'All other fields must be strings, empty string when unreadable. '
+        'evidence should briefly cite visible text, not external facts. '
+        'caveat should mention when exact set/variant needs checking against a catalog. '
+        'This is an image-based tentative identification, not catalog verification or authenticity grading.')
+    payload={'model':os.getenv('OPENAI_VISION_MODEL','gpt-4o-mini'), 'temperature':0,
+        'response_format':{'type':'json_object'}, 'max_tokens':350,
+        'messages':[{'role':'system','content':instructions},
+                    {'role':'user','content':[{'type':'text','text':'Identify the card. If uncertain, say so.'},
+                                               {'type':'image_url','image_url':{'url':data_url,'detail':'high'}}]}]}
+    req=urllib.request.Request('https://api.openai.com/v1/chat/completions',data=json.dumps(payload).encode(),
+         headers={'Authorization':'Bearer '+key,'Content-Type':'application/json'},method='POST')
+    try:
+        with urllib.request.urlopen(req,timeout=35) as response: result=json.load(response)
+        raw_result=result['choices'][0]['message']['content']
+        obj=json.loads(raw_result)
+        if not isinstance(obj,dict): raise ValueError('Invalid response')
+        category=obj.get('category','Unknown')
+        if category not in ('Pokemon','One Piece','Sports','Unknown'):category='Unknown'
+        confidence=obj.get('confidence','low')
+        if confidence not in ('high','medium','low'):confidence='low'
+        clean={k:str(obj.get(k,'') or '')[:160] for k in ('name','set','number','year','variant','evidence','caveat')}
+        return jsonify(category=category,confidence=confidence,**clean,
+          verified=False,disclaimer='Tentative AI identification. Verify the card number, set and variant before adding it to a collection. Not an authenticity or grade assessment.')
+    except urllib.error.HTTPError as e:
+        app.logger.warning('Identification API HTTP error %s',e.code)
+        return jsonify(error='Identification provider rejected the request. Check the API key, billing, and model access in Render.'),502
+    except Exception as e:
+        app.logger.warning('Identification failed: %s',str(e))
+        return jsonify(error='Could not identify this photo right now. Try a clear, straight-on photo with readable text.'),502
+
 if __name__=='__main__': app.run(host='0.0.0.0',port=int(__import__('os').environ.get('PORT',5050)),debug=False)

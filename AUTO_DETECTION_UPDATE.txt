@@ -1,0 +1,19 @@
+TCG Quest V3 - automatic detection update
+
+Changes:
+- Estimates photo background from four corners in LAB color space.
+- Tests several foreground thresholds to locate a card-shaped silhouette.
+- Uses the same silhouette for the initial editable green corners.
+- Keeps the manual green corner and yellow printed-frame controls.
+- Withholds automatic centering numbers if printed-border consistency checks fail.
+
+Installation:
+Replace only app.py and index.html in the root of your GitHub repository.
+Ensure there is exactly one app.py and one index.html. Commit both changes.
+Render should redeploy automatically if automatic deployments are enabled.
+
+Limitations:
+The revised detection is experimental. It was syntax-checked but could not be
+runtime-tested in this environment because Flask and OpenCV are unavailable.
+Always verify the detected edges on real cards before relying on measurements.
+No official PSA grade is generated.
