@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>TCG QUEST — Scan. Discover. Level Up.</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/><style>:root{color-scheme:dark;--bg:#080b16;--panel:#111629;--line:#303751;--muted:#a6aec7;--mint:#66ffc1;--violet:#9e77ff}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#f5f6ff;font:16px Outfit,system-ui,sans-serif;overflow-x:hidden}body:before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 80% 10%,#5d2dba42,transparent 42%),radial-gradient(ellipse at 5% 42%,#0e8d7850,transparent 35%);z-index:-1}.shell{max-width:1180px;margin:auto;padding:0 24px}nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid #ffffff15}.brand{font-weight:900;letter-spacing:.04em;font-size:23px}.brand b{color:var(--mint)}.navlinks{display:flex;gap:24px;align-items:center}.navlinks a{color:#d6d9eb;text-decoration:none;font-weight:600;font-size:14px}.pill{border:1px solid #7dffbd75;background:#66ffc116;color:var(--mint);border-radius:50px;padding:9px 15px;font-size:12px;font-weight:800}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:center;padding:75px 0 60px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:.24em;color:var(--mint)}h1{font-size:clamp(52px,7vw,91px);line-height:.98;letter-spacing:-.065em;margin:19px 0 22px;font-weight:900}h1 span{background:linear-gradient(110deg,var(--mint),#72cfff 48%,#bb8aff);background-clip:text;color:transparent}.lede{font-size:19px;line-height:1.65;color:#bfc6de;max-width:570px}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:29px}.btn{border:0;cursor:pointer;font:800 15px Outfit,sans-serif;border-radius:14px;padding:16px 23px;background:linear-gradient(110deg,#67ffbd,#66d7f9);color:#09131d;box-shadow:0 10px 35px #49ffc333;text-decoration:none;display:inline-block}.btn.secondary{background:#ffffff0c;border:1px solid #ffffff32;color:#fff;box-shadow:none}.btn:disabled{opacity:.55;cursor:wait}.visual{min-height:410px;position:relative;display:grid;place-items:center}.halo{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,#9b55ff55,transparent 65%);filter:blur(8px)}.cardart{position:absolute;width:230px;height:320px;border:3px solid #ffffff9c;border-radius:20px;background:linear-gradient(140deg,#2a275e,#7451a9 40%,#0c5c6a 75%,#141d37);box-shadow:0 35px 75px #000a,inset 0 0 0 7px #ffffff19;display:flex;align-items:center;justify-content:center;font-size:90px}.cardart:after{content:'TCG QUEST';position:absolute;bottom:27px;font-size:17px;letter-spacing:.2em;font-weight:900;color:white}.cardart.one{transform:translate(-55px,6px) rotate(-17deg);opacity:.7}.cardart.two{transform:translate(44px,-7px) rotate(12deg);background:linear-gradient(145deg,#3e1c6c,#b16ad4 45%,#124e6e)}.float{position:absolute;padding:12px 17px;background:#131b31df;border:1px solid #8cfbd755;border-radius:15px;box-shadow:0 10px 30px #0008;font-weight:800;font-size:13px}.float.top{right:-5px;top:26px}.float.bottom{left:-10px;bottom:22px;color:var(--mint)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:75px}.stat{background:#12182c9c;border:1px solid #ffffff18;border-radius:18px;padding:23px}.stat strong{display:block;font-size:24px;color:var(--mint)}.stat small{color:var(--muted)}section{scroll-margin-top:25px}.sectionhead{margin-bottom:26px}.sectionhead h2{font-size:clamp(30px,4vw,44px);letter-spacing:-.045em;margin:8px 0}.sectionhead p{color:var(--muted);max-width:720px;line-height:1.6}.scanner{background:linear-gradient(130deg,#19213c,#11172b 70%);border:1px solid #7887ba55;border-radius:27px;padding:28px;box-shadow:0 24px 65px #0005}.tag{display:inline-block;border-radius:50px;padding:6px 11px;background:#a77cff1c;color:#c9b3ff;font-size:12px;font-weight:800}.uploads{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:20px 0}.drop{border:2px dashed #64708f;border-radius:19px;min-height:230px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;cursor:pointer;background:#ffffff05;transition:.2s;overflow:hidden;position:relative;text-align:center;padding:18px}.drop:hover,.drop.drag{border-color:var(--mint);background:#66ffc10a}.drop input{position:absolute;opacity:0;width:100%;height:100%;cursor:pointer}.drop .symbol{font-size:37px}.drop b{font-size:18px}.drop small{color:var(--muted)}.drop img{max-height:170px;max-width:100%;object-fit:contain;border-radius:8px}.note{color:#b3bdd4;font-size:13px;line-height:1.6}.error{color:#ff9eae;margin:12px 0}.result{margin-top:20px;padding:23px;border-radius:22px;background:#0a1021;border:1px solid #65ffbb55}.result h3{margin-top:0}.resultsgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}.measurement{background:#171f34;border-radius:18px;padding:18px}.measurement img{width:100%;max-height:350px;object-fit:contain;border-radius:12px;background:#070a13}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.metric{background:#0c1426;padding:13px;border-radius:12px}.metric small{color:var(--muted);display:block}.metric strong{color:var(--mint);font-size:23px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:17px;margin:25px 0 80px}.feature{background:#131a2e;border:1px solid #ffffff1c;border-radius:20px;padding:25px}.feature .ico{font-size:31px}.feature h3{font-size:20px;margin:14px 0 8px}.feature p{color:var(--muted);line-height:1.6;font-size:14px;margin:0}.footer{padding:30px 0 50px;border-top:1px solid #ffffff20;color:var(--muted);font-size:13px}.footer b{color:white}@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:55px}.visual{min-height:340px}.cardart{width:185px;height:260px}.navlinks a:not(.pill){display:none}.stats,.features{grid-template-columns:1fr}.uploads,.resultsgrid{grid-template-columns:1fr}.scanner{padding:18px}.float.top{right:0}.float.bottom{left:0}}
+.marketbox{margin:70px 0 85px;border:1px solid #6cf7bd44;border-radius:28px;padding:30px;background:linear-gradient(135deg,#15213a,#14152c 60%,#22183d);box-shadow:0 25px 80px #0006}.marketform{display:flex;gap:12px;flex-wrap:wrap}.marketform input,.marketform select{min-width:180px;flex:1;background:#090e1e;border:1px solid #66708f;border-radius:13px;color:white;padding:15px;font:inherit}.marketgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:15px;margin-top:24px}.marketitem{background:#0a1020;border:1px solid #ffffff26;border-radius:17px;padding:14px;min-width:0}.marketitem img{width:100%;height:170px;object-fit:contain;background:#171e30;border-radius:12px}.marketitem h3{font-size:14px;min-height:48px;line-height:1.4}.marketitem strong{color:var(--mint);font-size:21px}.marketitem a{color:#a9ddff}.marketstatus{margin:14px 0;color:#c8d0e7;font-size:14px}.glowline{height:2px;background:linear-gradient(90deg,transparent,#66ffc1,#a77cff,transparent);box-shadow:0 0 22px #66ffc1;margin:30px 0}.pulse{animation:shimmer 4s ease-in-out infinite alternate}@keyframes shimmer{to{filter:drop-shadow(0 0 22px #8b6dff);transform:translateY(-7px)}}.cardart.two{animation:shimmer 4s ease-in-out infinite alternate}@media(max-width:600px){.marketbox{padding:18px}.marketform{flex-direction:column}}
+</style><style>.vaultform{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;align-items:end;margin:20px 0}.vaultform label{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:800;color:#bfc6de}.vaultform input,.vaultform select{width:100%;padding:14px 12px;border-radius:12px;border:1px solid #53617b;background:#0b1122;color:white;font:inherit}.vaultform button{grid-column:1/-1}.vaultstats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.vaultcards{display:grid;gap:10px;margin:15px 0}.vaultcard{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid #ffffff22;border-radius:14px;padding:14px;background:#ffffff08}.vaultcard small{display:block;color:#a6aec7;margin-top:4px}.vaultcard button{background:#ffffff12;color:#ffb4c0;border:1px solid #ffffff25;border-radius:9px;padding:9px 12px;cursor:pointer}.vaultcard .value{color:#66ffc1;font-weight:800}@media(max-width:850px){.vaultform{grid-template-columns:1fr 1fr}.vaultform label:first-child{grid-column:1/-1}.vaultstats{grid-template-columns:1fr}}@media(max-width:500px){.vaultform{grid-template-columns:1fr}.vaultform label:first-child{grid-column:auto}.vaultcard{flex-wrap:wrap}}
+.marketbox{margin:70px 0 85px;border:1px solid #6cf7bd44;border-radius:28px;padding:30px;background:linear-gradient(135deg,#15213a,#14152c 60%,#22183d);box-shadow:0 25px 80px #0006}.marketform{display:flex;gap:12px;flex-wrap:wrap}.marketform input,.marketform select{min-width:180px;flex:1;background:#090e1e;border:1px solid #66708f;border-radius:13px;color:white;padding:15px;font:inherit}.marketgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:15px;margin-top:24px}.marketitem{background:#0a1020;border:1px solid #ffffff26;border-radius:17px;padding:14px;min-width:0}.marketitem img{width:100%;height:170px;object-fit:contain;background:#171e30;border-radius:12px}.marketitem h3{font-size:14px;min-height:48px;line-height:1.4}.marketitem strong{color:var(--mint);font-size:21px}.marketitem a{color:#a9ddff}.marketstatus{margin:14px 0;color:#c8d0e7;font-size:14px}.glowline{height:2px;background:linear-gradient(90deg,transparent,#66ffc1,#a77cff,transparent);box-shadow:0 0 22px #66ffc1;margin:30px 0}.pulse{animation:shimmer 4s ease-in-out infinite alternate}@keyframes shimmer{to{filter:drop-shadow(0 0 22px #8b6dff);transform:translateY(-7px)}}.cardart.two{animation:shimmer 4s ease-in-out infinite alternate}@media(max-width:600px){.marketbox{padding:18px}.marketform{flex-direction:column}}
+</style><style>.tq-chart-panel{margin:22px 0;padding:20px;border:1px solid #ffffff2b;border-radius:18px;background:#0b1225}.tq-chart-header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.tq-chart-header h3{margin:0}.tq-chart-header p{margin:8px 0}.tq-chart-ranges{display:flex;gap:5px}.tq-chart-ranges button{background:#1d2940;color:white;border:1px solid #53617e;border-radius:8px;padding:8px 12px;cursor:pointer}.tq-chart-ranges button[aria-pressed=true]{border-color:#62f5bd;color:#62f5bd}.tq-chart-legend{display:flex;gap:22px;flex-wrap:wrap;color:#cbd4e8;font-size:13px;margin:14px 0}.tq-chart-legend span{display:flex;align-items:center;gap:7px}.tq-chart-legend i{display:inline-block;width:12px;height:12px;border-radius:3px}.tq-vault-row{gap:12px;flex-wrap:wrap}.tq-vault-row button{cursor:pointer}</style><style>
+/* TCG Quest tabbed collector dashboard */
+.shell{max-width:1550px;padding:0 clamp(12px,2vw,32px)}nav{position:sticky;top:0;z-index:100;background:#080e1cf5;backdrop-filter:blur(18px);display:flex;gap:22px;padding:10px 0;align-items:center}.tq-logo{white-space:nowrap;text-decoration:none;color:white;font-size:23px}.tq-tabs{display:flex;align-items:center;justify-content:flex-end;gap:3px;flex-wrap:wrap}.tq-tabs a{color:#cddaf2;padding:12px 11px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap}.tq-tabs a:hover,.tq-tabs a[aria-current="page"]{background:#07315b;color:#8bd9ff;box-shadow:inset 0 -2px #28aaff}#tq-menu-toggle{display:none}.tq-page{display:none;min-height:75vh;padding:30px 0 70px}.tq-page.tq-active{display:block}.glowline{display:none}.tq-banner{min-height:350px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:20px;padding:32px;border-radius:24px;background:radial-gradient(ellipse at 35% 10%,#185cb66a,transparent 55%),radial-gradient(ellipse at 92% 60%,#7826b575,transparent 60%),linear-gradient(120deg,#091b36,#070d1a 68%);border:1px solid #238ce877;box-shadow:0 0 55px #125cb722;overflow:hidden}.tq-banner-copy{align-self:center}.tq-eyebrow{color:#53e4fc;font-weight:900;letter-spacing:.17em;font-size:12px}.tq-banner h1{font-size:clamp(36px,5vw,74px);line-height:1.02;letter-spacing:-.05em;margin:20px 0}.tq-banner h1 span{color:#8effd3}.tq-banner p{color:#d2dcef;font-size:17px}.tq-primary{padding:13px 21px;background:linear-gradient(120deg,#00a6ff,#32ffbd);color:#031321;border:0;border-radius:12px;font-weight:900;cursor:pointer}.tq-profile{align-self:center;display:flex;align-items:center;flex-direction:column;text-align:center;padding:14px;background:#040c1b80;border:1px solid #7b89d05a;border-radius:22px}.tq-profile-ring{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;overflow:hidden;border:4px solid #43ceff;box-shadow:0 0 32px #00a6ff66;background:linear-gradient(140deg,#102b61,#7a35ad)}.tq-profile-ring img{width:100%;height:100%;object-fit:cover}.tq-profile-ring span{font-size:76px}.tq-profile-name{font-weight:900;margin:12px 0 9px;letter-spacing:.08em}.tq-profile-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.tq-mini-btn,.tq-remove{background:#112a4c;color:white;border:1px solid #5a92c4;border-radius:10px;padding:9px 11px;cursor:pointer;font-size:12px}.tq-animate-switch{margin:11px 0 5px;font-size:13px;color:#9efed4}.tq-remove{background:transparent;border:0;color:#aebcda;text-decoration:underline}.tq-profile-help{font-size:11px!important;line-height:1.4;color:#a9b9d4!important;max-width:280px;margin:5px 0!important}.tq-profile.tq-animated .tq-profile-ring{animation:tq-bob 3.5s ease-in-out infinite,tq-glow 2.5s ease-in-out infinite alternate}@keyframes tq-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}@keyframes tq-glow{from{box-shadow:0 0 14px #00a6ff66}to{box-shadow:0 0 35px #44ffb8bb}}.tq-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:17px 0}.tq-actions button{border:1px solid #148de9;background:#07172a;border-radius:14px;padding:22px 16px;text-align:left;color:#e8f7ff;font-size:23px;cursor:pointer;box-shadow:0 0 14px #118cf12b}.tq-actions button:nth-child(2){border-color:#2ae69a}.tq-actions button:nth-child(3){border-color:#a674ff}.tq-actions button:nth-child(4){border-color:#ffc04c}.tq-actions b,.tq-actions small{display:block}.tq-actions b{font-size:17px;margin:8px 0}.tq-actions small{font-size:12px;color:#b8c5dd}.tq-dashboard{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}.tq-dash-panel{background:#0b1628;border:1px solid #34567e;border-radius:18px;padding:23px}.tq-dash-panel h2{margin:0 0 20px;font-size:21px}.tq-dash-panel p{color:#b6c6de}.tq-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.tq-metrics>div{padding:17px 9px;border:1px solid #2d4565;border-radius:12px;background:#0a2038;text-align:center}.tq-metrics strong{display:block;font-size:clamp(18px,2.5vw,29px);color:#55c2ff}.tq-metrics>div:nth-child(3) strong{color:#4ce6a4}.tq-metrics small{color:#b7c8dd}.tq-home-chart-note{margin-top:20px;color:#c7d8eb;font-size:14px}.tq-text-button,.tq-home-links button{border:1px solid #2579b2;border-radius:9px;background:#0c2845;color:#85d6ff;padding:10px 13px;cursor:pointer;margin-top:10px}.tq-home-links{display:flex;gap:12px;flex-wrap:wrap}.tq-disclaimer{font-size:12px}.tq-page .sectionhead{margin-top:8px}@media(max-width:1000px){nav{flex-wrap:wrap}.tq-tabs{justify-content:flex-start}.tq-tabs a{font-size:12px;padding:9px}.tq-actions{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){#tq-menu-toggle{display:block;margin-left:auto;background:#0d2b4b;color:white;border:1px solid #3c8cc7;padding:9px;border-radius:9px}.tq-tabs{display:none;width:100%;flex-direction:column;align-items:stretch}.tq-tabs.tq-open{display:flex}.tq-banner{grid-template-columns:1fr;padding:20px}.tq-dashboard{grid-template-columns:1fr}.tq-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.tq-actions button{padding:13px;font-size:19px}.tq-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.tq-metrics>div{padding:12px 5px}.tq-metrics strong{font-size:18px}.tq-metrics small{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.tq-profile.tq-animated .tq-profile-ring{animation:none}}
+</style><style>
+/* Collector dashboard: artwork-first, reference-inspired design */
+body{background:#030b14!important;font-family:Outfit,system-ui,sans-serif!important}
+.shell{max-width:1660px!important;padding:0 14px!important}
+nav{padding:0!important;min-height:80px;background:#07101c;border-bottom:1px solid #194063;gap:12px}
+.tq-logo{width:240px;text-decoration:none;text-align:center;flex-shrink:0}
+.ref-logo{font-size:30px;font-weight:1000;letter-spacing:-2px;line-height:1;color:#e5f8ff;text-shadow:0 0 9px #006dff,3px 3px #0357ae;-webkit-text-stroke:1px #2e8bff}
+.ref-logo span{color:#bdff13;-webkit-text-stroke:0;font-size:30px}
+.tq-tabs{display:flex!important;gap:0!important;align-items:stretch!important;flex:1;justify-content:space-around!important}
+.tq-tabs a{display:flex!important;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:5px;padding:9px 10px!important;border-left:1px solid #1a2e40;border-radius:0!important;min-height:78px;white-space:nowrap;font-size:12px!important}
+.tq-tabs a[aria-current=page]{background:linear-gradient(#07233e,#004f9a)!important;box-shadow:inset 0 -3px #00adff;color:#fff!important}
+.ref-nav-icon{font-size:26px;color:#c6d8ff;line-height:1.1}
+#tq-home{margin:0!important;padding:0 0 30px!important}
+.ref-hero{height:230px;position:relative;background:url('collector-banner.jpg') center center/100% 100% no-repeat;overflow:visible;border-bottom:2px solid #0b87f7}
+.ref-banner-slogan{position:absolute;right:1.7%;top:13px;font-size:29px;line-height:1.05;text-align:center;font-weight:800;font-style:italic;color:#9bd9ff;text-shadow:0 0 12px #009cff,2px 3px #06101f;transform:rotate(-8deg);display:none}
+.ref-hero-avatar{position:absolute;left:50%;transform:translateX(-50%);bottom:6px;z-index:2}
+.ref-avatar{position:relative!important;width:150px!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;display:flex!important;flex-direction:column;align-items:center;gap:2px}
+.ref-avatar .tq-profile-ring{width:96px!important;height:96px!important;border:3px solid #2bdbff!important;background:#101a30!important;box-shadow:0 0 18px #07aeff!important}
+.ref-avatar .tq-profile-ring img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.ref-avatar .tq-profile-name,.ref-avatar .tq-profile-help,.ref-avatar .tq-remove{display:none!important}
+.ref-avatar .tq-profile-actions{display:flex!important;gap:4px!important;justify-content:center;flex-wrap:nowrap}
+.ref-avatar .tq-mini-btn{font-size:10px!important;white-space:nowrap;padding:5px!important;background:#061e34e8!important;border:1px solid #32b7fa!important;border-radius:6px!important;cursor:pointer}
+.ref-avatar .tq-animate-switch{font-size:10px!important;white-space:nowrap;color:#fff;background:#07111bbf;border-radius:5px;padding:2px 4px}
+.ref-quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin:12px 0 14px}
+.ref-quick button{display:flex;align-items:center;gap:12px;min-width:0;text-align:left;background:#041321;color:white;border:2px solid #00a8ff;border-radius:12px;padding:17px 18px;cursor:pointer;box-shadow:inset 0 0 15px #005cb52b,0 0 11px #007cff50}
+.ref-quick button:nth-child(2){border-color:#00f4a0;box-shadow:0 0 11px #00db7750}.ref-quick button:nth-child(3){border-color:#a05dff;box-shadow:0 0 11px #a05dff50}.ref-quick button:nth-child(4){border-color:#ffb91e;box-shadow:0 0 11px #ffb91e50}
+.ref-icon{font-size:32px;flex-shrink:0}.ref-quick b{display:block;font-size:19px}.ref-quick small{display:block;font-size:12px;color:#b9c7dc;margin-top:5px}.ref-arrow{margin-left:auto;font-size:28px;color:#2acaff}
+.ref-main{display:grid;grid-template-columns:1.25fr .94fr .7fr;gap:12px;align-items:stretch}
+.ref-left{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ref-panel{background:#04111e;border:1px solid #284967;border-radius:12px;padding:14px;min-width:0}
+.ref-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}.ref-heading b{font-size:17px}.ref-heading button,.ref-chart-link{background:transparent;border:0;color:#27bdff;cursor:pointer;font-size:12px}
+.ref-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.ref-metrics>div{background:#0b1d31;border:1px solid #24415d;border-radius:8px;padding:16px 5px;text-align:center}.ref-metrics strong{font-size:23px;color:#f6fbff;display:block}.ref-metrics>div:nth-child(2) strong{color:#27aaff}.ref-metrics>div:nth-child(3) strong{color:#00ed99}.ref-metrics>div:nth-child(4) strong{color:#ffc552}.ref-metrics small{font-size:11px;display:block;margin-top:6px}
+.ref-chart{flex:1}.ref-range{display:flex;gap:4px}.ref-range button{border:1px solid #294660;border-radius:6px;padding:7px;color:#c8d9f2}.ref-range button:last-child{background:#0768dc;color:#fff}.ref-legend{display:flex;gap:16px;font-size:12px;margin-bottom:10px}.ref-legend span:first-child{color:#249aff}.ref-legend span:last-child{color:#00e994}#ref-home-chart{width:100%;height:220px;display:block}.ref-chart-link{margin-top:7px}
+.ref-prices input{width:100%;background:#102239;color:white;border:1px solid #405d78;border-radius:8px;padding:13px;font:inherit}
+.ref-categories{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:13px 0}.ref-categories button,.ref-sports button{background:#0b1b2a;color:#dce9ff;border:1px solid #334c63;border-radius:7px;padding:9px 4px;font-size:12px;cursor:pointer}.ref-categories button.selected,.ref-sports button.selected{border-color:#00aeff;background:#07529b;color:#fff}.ref-sports small{color:#d6e1f0}.ref-sports>div{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:9px 0 12px}.ref-search{width:100%;background:#006df1;color:#fff;border:1px solid #2db5ff;border-radius:8px;padding:13px;cursor:pointer;font-weight:800}.ref-marketlinks{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:13px 0}.ref-marketlinks>*{text-align:center;background:#071625;color:#fff;text-decoration:none;border:1px solid #00dd82;border-radius:8px;padding:12px 4px;font-size:12px;cursor:pointer}.ref-marketlinks>*:nth-child(2){border-color:#00aaff}.ref-marketlinks>*:nth-child(3){border-color:#ffb128}.ref-muted{font-size:11px;color:#8c9ab0}
+.ref-recent-list{display:flex;flex-direction:column;gap:8px;font-size:13px;color:#c8d5e8}.ref-recent-item{background:#0b1c2b;border:1px solid #203950;border-radius:8px;padding:12px}.ref-recent-item b{display:block;font-size:14px}.ref-recent-item small{display:block;color:#b7c6d9;margin-top:5px}
+.ref-bottom{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px}.ref-bottom button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:9px;background:linear-gradient(125deg,#160e35,#07101e);border:1px solid #623dba;border-radius:12px;padding:16px;color:#fff;cursor:pointer}.ref-bottom button:nth-child(2){background:linear-gradient(125deg,#052d34,#07101e);border-color:#116e8d}.ref-bottom button:nth-child(3){background:linear-gradient(125deg,#30200a,#07101e);border-color:#8c6417}.ref-bottom button:nth-child(4){background:linear-gradient(125deg,#33101a,#07101e);border-color:#973b48}.ref-bottom span{font-size:32px}.ref-bottom b{font-size:18px}.ref-bottom small{color:#c8d2e1}.ref-bottom em{font-size:12px;background:#4c189d;border:1px solid #aa62ff;padding:9px 14px;border-radius:7px;font-style:normal}.ref-bottom button:nth-child(2) em{background:#005da7}.ref-bottom button:nth-child(3) em{background:#825200}.ref-bottom button:nth-child(4) em{background:#8a261e}
+@media(max-width:1200px){.tq-logo{width:155px}.ref-logo{font-size:21px}.tq-tabs a{padding:8px 4px!important;font-size:10px!important}.ref-nav-icon{font-size:20px}.ref-main{grid-template-columns:1fr 1fr}.ref-recent{grid-column:1/-1}.ref-hero{height:190px}.ref-quick b{font-size:15px}}
+@media(max-width:750px){nav{min-height:58px}.tq-logo{width:auto}.ref-logo{font-size:22px}.tq-tabs{display:none!important}.tq-tabs.tq-open{display:flex!important;flex-direction:column!important;position:absolute;top:58px;left:0;right:0;background:#06111d;z-index:50}.tq-tabs a{min-height:45px;flex-direction:row!important}.ref-hero{height:140px}.ref-avatar .tq-profile-ring{width:65px!important;height:65px!important}.ref-avatar .tq-profile-actions{transform:scale(.8)}.ref-avatar .tq-animate-switch{font-size:8px}.ref-quick{grid-template-columns:1fr 1fr}.ref-quick button{padding:11px}.ref-icon{font-size:24px}.ref-quick small{font-size:10px}.ref-main{grid-template-columns:1fr}.ref-recent{grid-column:auto}.ref-bottom{grid-template-columns:1fr 1fr}.ref-metrics strong{font-size:16px}.ref-metrics small{font-size:10px}}
+</style><style>
+/* TCG Quest V3 — desktop readability and responsive visual refinement */
+@media (min-width: 1250px) {
+  .shell {max-width: 1920px!important; padding: 0 18px!important;}
+  nav {min-height: 84px!important;}
+  .tq-logo {width: 205px!important;}
+  .tq-tabs {flex: 1!important; justify-content: stretch!important; flex-wrap: nowrap!important;}
+  .tq-tabs a {flex:1 1 0!important; min-width:0!important; font-size: 13px!important; padding: 11px 4px!important;}
+  .ref-nav-icon {font-size: 27px!important;}
+  .ref-hero {height: clamp(210px, 15vw, 290px)!important; background-size:cover!important;}
+  .ref-quick {gap: 14px!important; margin: 15px 0!important;}
+  .ref-quick button {min-height: 82px!important; padding: 17px 20px!important;}
+  .ref-quick b {font-size: 19px!important;}
+  .ref-quick small {font-size: 12px!important; line-height:1.5!important;}
+  .ref-main {grid-template-columns: minmax(0,1.22fr) minmax(0,.93fr) minmax(0,.73fr)!important; gap:14px!important;}
+  .ref-panel {padding:18px!important;}
+  .ref-heading b {font-size: 17px!important;}
+  .ref-metrics>div {padding: 20px 7px!important;}
+  .ref-bottom button {min-height: 148px!important; padding:20px!important;}
+}
+.ref-panel, .ref-quick button, .ref-bottom button {transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;}
+.ref-quick button:hover,.ref-bottom button:hover {transform: translateY(-2px);filter:brightness(1.12);}
+.ref-quick button:focus-visible,.ref-bottom button:focus-visible,.tq-tabs a:focus-visible {outline: 3px solid #8ce8ff;outline-offset: 2px;}
+.ref-prices input:focus {outline:2px solid #18adff;outline-offset:1px;}
+@media (min-width: 751px) and (max-width: 1249px) {
+  .tq-tabs {flex-wrap:nowrap!important; flex:1!important;}
+  .tq-tabs a {flex:1 1 0!important; min-width:0!important;}
+  .ref-quick {gap:9px!important;}
+  .ref-quick button {padding:12px!important;}
+}
+@media (max-width: 750px) {
+  .shell {padding:0 10px!important;}
+  .ref-hero {background-size:cover!important; background-position:center!important;}
+  .ref-quick button {min-height:75px;}
+  .ref-panel {padding:12px!important;}
+}
+@media (prefers-reduced-motion: reduce) {
+  .ref-panel,.ref-quick button,.ref-bottom button {transition:none!important;}
+  .ref-quick button:hover,.ref-bottom button:hover {transform:none!important;}
+}
+</style><style>
+/* TCG Quest V3 reference-accurate presentation; existing JavaScript remains untouched. */
+:root{color-scheme:dark}
+html,body{margin:0!important;background:#020a12!important}
+body{font-family:Arial,Helvetica,sans-serif!important;color:#f6f9ff!important}
+.shell{width:100%!important;max-width:none!important;padding:0!important;margin:0!important}
+nav{width:100%!important;min-height:81px!important;height:81px!important;display:flex!important;gap:0!important;padding:0 0 0 12px!important;background:#020c15!important;border-bottom:1px solid #18384e!important;box-sizing:border-box!important;position:relative!important}
+.tq-logo{width:238px!important;min-width:238px!important;height:80px!important;display:block!important;background:url('reference-logo.png') center center/205px 69px no-repeat!important}
+.tq-logo .ref-logo{visibility:hidden!important}
+.tq-tabs{display:flex!important;flex:1!important;justify-content:flex-start!important;gap:0!important;min-width:0!important;flex-wrap:nowrap!important}
+.tq-tabs a{min-width:0!important;flex:1 1 0!important;height:80px!important;min-height:80px!important;padding:0!important;box-sizing:border-box!important;border-left:1px solid #153045!important;border-radius:0!important;background-position:center!important;background-repeat:no-repeat!important;background-size:100% 100%!important;filter:none!important}
+
+
+
+
+
+
+
+
+
+.tq-tabs a>span{opacity:0!important}
+.tq-tabs a[aria-current=page]{box-shadow:inset 0 -3px #00b8ff!important}
+.tq-tabs a:hover{filter:brightness(1.3)!important}
+#tq-home{margin:0!important;padding:0 14px 20px!important;max-width:none!important}
+.ref-hero{margin:0 -14px!important;height:auto!important;aspect-ratio:1536/234!important;min-height:180px!important;max-height:300px!important;background:url('reference-banner.png') center center/100% 100% no-repeat!important;border-bottom:1px solid #009bff!important;border-radius:0!important}
+.ref-hero-avatar,.ref-banner-slogan{display:none!important}
+.ref-quick{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;margin:10px 0 14px!important}
+.ref-quick>button{width:100%!important;min-width:0!important;aspect-ratio:400/88!important;min-height:75px!important;height:auto!important;padding:0!important;border:0!important;border-radius:12px!important;background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;box-shadow:none!important;overflow:hidden!important}
+.ref-quick>button:nth-child(1){background-image:url('action-1.png')!important}
+.ref-quick>button:nth-child(2){background-image:url('action-2.png')!important}
+.ref-quick>button:nth-child(3){background-image:url('action-3.png')!important}
+.ref-quick>button:nth-child(4){background-image:url('action-4.png')!important}
+.ref-quick>button>*{opacity:0!important}
+.ref-main{display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(0,.93fr) minmax(0,.72fr)!important;gap:12px!important;align-items:stretch!important}
+.ref-left{display:flex!important;flex-direction:column!important;gap:8px!important;min-width:0!important}
+.ref-panel{background:#030f19!important;border:1px solid #28455b!important;border-radius:13px!important;padding:12px!important;min-width:0!important;box-shadow:none!important}
+.ref-heading{margin-bottom:12px!important;font-size:15px!important}
+.ref-heading b{font-size:15px!important}
+.ref-heading button{color:#25c6ff!important}
+.ref-metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+.ref-metrics>div{min-width:0!important;min-height:78px!important;background:#0b1b29!important;border:1px solid #234055!important;border-radius:8px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important}
+.ref-metrics strong{font-size:24px!important;color:#f3f9ff!important}
+.ref-metrics>div:nth-child(2){background:#06233b!important}.ref-metrics>div:nth-child(2) strong{color:#1dbdff!important}
+.ref-metrics>div:nth-child(3){background:#04271e!important}.ref-metrics>div:nth-child(3) strong{color:#17ef9a!important}
+.ref-metrics>div:nth-child(4) strong{color:#ffce4d!important}
+.ref-metrics small{font-size:11px!important}
+.ref-chart{min-height:245px!important;flex:1!important}
+.ref-chart canvas{max-width:100%!important}
+.ref-prices{min-height:405px!important}
+.ref-recent{min-height:405px!important}
+.ref-prices input{font-size:13px!important;min-height:42px!important}
+.ref-prices button{font-size:12px!important}
+.ref-bottom{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin:12px 0 0!important}
+.ref-bottom>button{aspect-ratio:369/168!important;min-height:130px!important;width:100%!important;padding:0!important;border:0!important;border-radius:12px!important;background-size:100% 100%!important;background-position:center!important;background-repeat:no-repeat!important;box-shadow:none!important;overflow:hidden!important}
+.ref-bottom>button:nth-child(1){background-image:url('feature-1.png')!important}
+.ref-bottom>button:nth-child(2){background-image:url('feature-2.png')!important}
+.ref-bottom>button:nth-child(3){background-image:url('feature-3.png')!important}
+.ref-bottom>button:nth-child(4){background-image:url('feature-4.png')!important}
+.ref-bottom>button>*{opacity:0!important}
+.ref-quick>button:hover,.ref-bottom>button:hover{filter:brightness(1.16)!important;transform:translateY(-2px)!important}
+.ref-quick>button:focus-visible,.ref-bottom>button:focus-visible,.tq-tabs a:focus-visible{outline:3px solid #fff!important;outline-offset:2px!important}
+@media(min-width:1700px){.ref-hero{max-height:none!important}}
+@media(max-width:1050px){.tq-logo{width:160px!important;min-width:160px!important;background-size:145px auto!important}.tq-tabs a{height:70px!important;min-height:70px!important}nav{height:71px!important;min-height:71px!important}.ref-main{grid-template-columns:1fr 1fr!important}.ref-recent{grid-column:1/-1!important;min-height:180px!important}.ref-metrics strong{font-size:20px!important}}
+@media(max-width:750px){nav{height:auto!important;min-height:62px!important;padding-left:8px!important;position:relative!important}.tq-logo{height:60px!important;width:170px!important;min-width:170px!important;background-size:160px auto!important}.tq-tabs{display:none!important}.tq-tabs.tq-open{display:flex!important;flex-direction:column!important;position:absolute!important;top:61px!important;left:0!important;right:0!important;z-index:200!important;background:#03101d!important}.tq-tabs.tq-open a{background-image:none!important;height:50px!important;min-height:50px!important;padding:8px!important}.tq-tabs.tq-open a>span{opacity:1!important}.ref-hero{min-height:110px!important;aspect-ratio:1536/234!important;background-size:cover!important}.ref-quick{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.ref-quick>button{min-height:75px!important}.ref-main{grid-template-columns:1fr!important}.ref-recent{grid-column:auto!important}.ref-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ref-bottom{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.ref-bottom>button{min-height:130px!important}}
+@media(max-width:430px){.ref-quick,.ref-bottom{grid-template-columns:1fr!important}.ref-quick>button{max-height:100px!important}.ref-bottom>button{max-height:185px!important}}
+</style><style id="tq-nav-image-fix">
+/* Nav images attach to semantic targets, not shifting child positions. */
+
+
+
+
+
+
+
+
+
+</style>
+<style id="tq-navigation-definitive-fix">
+/* Exactly nine navigation images, in the same order as the nine existing links. */
+#tq-tabs > a:nth-of-type(1) { background-image: url("nav-1.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(2) { background-image: url("nav-2.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(3) { background-image: url("nav-3.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(4) { background-image: url("nav-4.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(5) { background-image: url("nav-5.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(6) { background-image: url("nav-6.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(7) { background-image: url("nav-7.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(8) { background-image: url("nav-8.png?v=navfix-20261022") !important; }
+#tq-tabs > a:nth-of-type(9) { background-image: url("nav-9.png?v=navfix-20261022") !important; }
+</style>
+</head><body><div class="shell"><nav><a aria-label="TCG Quest Home" class="brand tq-logo" href="#home"><span class="ref-logo">TCG<span>✧</span>QUEST</span></a><button aria-expanded="false" aria-label="Toggle navigation" id="tq-menu-toggle" type="button">☰ Menu</button><div aria-label="Main navigation" class="tq-tabs" id="tq-tabs" role="navigation"><a data-tab="home" href="#home"><span class="ref-nav-icon">⌂</span><span>Home</span></a><a data-tab="collection" href="#collection"><span class="ref-nav-icon">▱</span><span>My Collection</span></a><a data-tab="scanner" href="#scanner"><span class="ref-nav-icon">⊕</span><span>Add Card</span></a><a data-tab="prices" href="#prices"><span class="ref-nav-icon">▥</span><span>Compare Prices</span></a><a data-tab="grading" href="#grading"><span class="ref-nav-icon">✦</span><span>Grading Helper</span></a><a data-tab="market" href="#market"><span class="ref-nav-icon">↗</span><span>Market Trends</span></a><a aria-label="Leaderboards (planned feature)" data-go="rewards" data-tab="rewards" href="#rewards"><span class="ref-nav-icon">🏆</span><span>Leaderboards</span></a><a data-tab="rewards" href="#rewards"><span class="ref-nav-icon">🏆</span><span>Rewards</span></a><a data-tab="features" href="#features"><span class="ref-nav-icon">⚙</span><span>Settings</span></a></div></nav><main><section class="tq-page" id="tq-home"><div class="ref-hero"><div class="ref-hero-avatar"><div class="tq-profile ref-avatar"><div class="tq-profile-ring"><img alt="Your collector profile" hidden="" id="tq-profile-image"/><span id="tq-profile-placeholder">🧢</span></div><div class="tq-profile-name">YOUR COLLECTOR AVATAR</div><div class="tq-profile-actions"><label class="tq-mini-btn" for="tq-profile-upload">⬆ Upload photo<input accept="image/*" hidden="" id="tq-profile-upload" type="file"/></label><label class="tq-mini-btn" for="tq-profile-camera">📷 Take photo<input accept="image/*" capture="user" hidden="" id="tq-profile-camera" type="file"/></label></div><label class="tq-animate-switch"><input id="tq-profile-animate" type="checkbox"/> ✨ Animate my avatar</label><button class="tq-remove" id="tq-profile-remove" type="button">Remove photo</button><p class="tq-profile-help">Photo stays on this device. Animation adds motion and glow; cartoon/AI art conversion is not included yet.</p></div></div><div class="ref-banner-slogan">Collect<br/>Scan<br/>Track<br/>Grow <span>♛</span></div></div>
+<div class="ref-quick">
+<button data-go="scanner"><span class="ref-icon">📷</span><span><b>Scan a Card</b><small>Identify, value, and add to your collection</small></span><span class="ref-arrow">›</span></button>
+<button data-go="prices"><span class="ref-icon">▥</span><span><b>Compare Prices</b><small>Check real market values</small></span><span class="ref-arrow">›</span></button>
+<button data-go="grading"><span class="ref-icon">✦</span><span><b>Grading Helper</b><small>See how your card could grade</small></span><span class="ref-arrow">›</span></button>
+<button data-go="collection"><span class="ref-icon">▱</span><span><b>View My Collection</b><small>Track value and profit over time</small></span><span class="ref-arrow">›</span></button>
+</div>
+<div class="ref-main">
+<div class="ref-left">
+<section class="ref-panel"><div class="ref-heading"><b>▱   My Collection Overview</b><button data-go="collection">View Collection →</button></div><div class="ref-metrics"><div><strong id="tq-home-cards">0</strong><small>Total Cards</small></div><div><strong id="tq-home-value">$0.00</strong><small>Current Value</small></div><div><strong id="tq-home-profit">$0.00</strong><small>Profit / Loss</small></div><div><strong id="ref-graded">—</strong><small>Graded Cards</small></div></div></section>
+<section class="ref-panel ref-chart"><div class="ref-heading"><b>📈   Collection Value &amp; Profit History</b><div class="ref-range"><button data-go="collection">30D</button><button data-go="collection">90D</button><button data-go="collection">All Time</button></div></div><div class="ref-legend"><span>● Collection Value</span><span>● Profit / Loss</span></div><canvas aria-label="Collection value and profit chart" height="245" id="ref-home-chart" width="700"></canvas><button class="ref-chart-link" data-go="collection">Open full collection history →</button></section>
+</div>
+<section class="ref-panel ref-prices"><div class="ref-heading"><b>▥   Compare Card Prices</b></div><input aria-label="Card name" id="ref-home-query" placeholder="Enter card name (e.g. Charizard, Ohtani, Luffy)"/><div class="ref-categories"><button class="ref-category selected" data-category="Pokémon">⚡ Pokémon</button><button class="ref-category" data-category="One Piece">☠ One Piece</button><button class="ref-category" data-category="Sports Cards">🏀 Sports Cards</button><button class="ref-category" data-category="All TCG">All TCG</button></div><div class="ref-sports"><small>Select Sport</small><div><button class="ref-sport selected">Baseball</button><button class="ref-sport">Basketball</button><button class="ref-sport">Football</button><button class="ref-sport">Hockey</button><button class="ref-sport">Soccer</button><button class="ref-sport">Other</button></div></div><button class="ref-search" id="ref-search">⌕   Search Prices</button><div class="ref-marketlinks"><a href="https://www.pricecharting.com/category/sports-cards" id="ref-pricecharting" rel="noopener" target="_blank">📈 PriceCharting</a><a href="https://www.ebay.com" id="ref-ebay" rel="noopener" target="_blank">🛒 eBay</a><button data-go="prices">▱ Compare All</button></div><small class="ref-muted">Links open marketplace searches; live prices require supported APIs.</small></section>
+<section class="ref-panel ref-recent"><div class="ref-heading"><b>◷   Recent Cards</b><button data-go="collection">View All →</button></div><div class="ref-recent-list" id="ref-recent-list">Add a card to see it here.</div></section>
+</div>
+<div class="ref-bottom"><button data-go="grading"><span>✦</span><b>AI Grading Helper</b><small>Check centering, edges, surface and get a predicted PSA grade.</small><em>Try Grading Helper →</em></button><button data-go="market"><span>📈</span><b>Market Trends</b><small>Explore market listings and trends</small><em>Explore Trends →</em></button><button data-go="rewards"><span>🏆</span><b>Leaderboards</b><small>See top collectors, earn points, and win end of year prizes.</small><em>View Leaderboards →</em></button><button data-go="rewards"><span>🎁</span><b>Rewards</b><small>Scan, collect, and earn points for exclusive prizes.</small><em>View Rewards →</em></button></div></section><section class="tq-page" id="scanner"><div class="sectionhead"><div class="eyebrow">⚡ EXPERIMENTAL CARD LAB</div><h2>Scan it. <span style="color:var(--mint)">Measure it.</span></h2><p>Real image processing — not random grading numbers. Upload clear photos and see the centering measurements generated by our local analysis engine.</p></div><div class="scanner"><span class="tag">● LIVE LOCAL IMAGE ANALYSIS</span><form id="form"><div class="uploads"><label class="drop" id="frontDrop"><input accept="image/*" name="front" required="" type="file"/><span class="symbol">📸</span><b>Front of card</b><small>Tap to upload or drag a photo here · Required</small></label><label class="drop" id="backDrop"><input accept="image/*" name="back" type="file"/><span class="symbol">🃏</span><b>Back of card</b><small>Tap to upload or drag a photo here · Recommended</small></label></div><p class="note">For best results: place your unsleeved card on a plain contrasting surface, photograph it straight on, avoid glare, and keep all four corners visible.</p><button class="btn" id="submit" type="submit">⚡ ANALYZE CARD NOW →</button><div class="error" id="error" role="alert"></div></form><div class="result" hidden="" id="result"><h3>✦ YOUR MEASUREMENT REPORT</h3><div class="resultsgrid" id="reports"></div><p class="note">⚠ PSA grade: <b>Not determined.</b> The scanner measures visible borders experimentally. Reliable PSA grade prediction also requires validated corner, edge, surface, and print-defect analysis. Borderless cards and unusual frames may not be measurable.</p></div></div></section><section class="tq-page" id="market"><div class="marketbox"><div class="eyebrow">✦ CARD DISCOVERY &amp; MARKETPLACE</div><h2 style="font-size:clamp(30px,4vw,46px);margin:12px 0">Find your next <span style="color:var(--mint)">grail.</span></h2><p class="lede" style="font-size:16px">Search live eBay listings when API credentials are configured. TCGplayer catalog and pricing are planned pending approved access. Prices shown are seller asking prices, not completed sales.</p><form class="marketform" id="marketForm"><input aria-label="Search cards" id="marketQuery" minlength="2" placeholder="Charizard 1999, Luffy manga, LeBron rookie…" required=""/><select aria-label="Market source" id="marketSource"><option value="ebay">eBay listings</option><option value="tcgplayer">TCGplayer (access required)</option></select><button class="btn" type="submit">⌕ SEARCH CARDS</button></form><div class="marketstatus" id="marketStatus" role="status">Checking marketplace connection…</div><div class="marketgrid" id="marketResults"></div><p class="note">Marketplace results are informational. Listings may include different sets, grades, variants, and conditions. TCG Quest is not affiliated with TCGplayer, eBay, or PSA.</p></div></section><section class="tq-page" id="collection" style="margin-top:80px;margin-bottom:80px"><div class="sectionhead"><div class="eyebrow">YOUR PERSONAL VAULT</div><h2>Build your <span style="color:var(--mint)">collection.</span></h2><p>Save your cards in this browser, track what you paid, and calculate your collection value. Data stays on this device; account syncing and live prices are not enabled yet.</p></div><div class="scanner"><form class="vaultform" id="vaultForm"><label>Card name<input id="cardName" maxlength="120" placeholder="e.g. Charizard ex" required=""/></label><label>Category<select id="cardCategory"><option>Pokémon</option><option>One Piece</option><option>Sports</option><option>Other TCG</option></select></label><label>Purchase price ($)<input id="cardCost" min="0" required="" step="0.01" type="number" value="0"/></label><label>Estimated value ($)<input id="cardValue" min="0" required="" step="0.01" type="number" value="0"/></label><button class="btn" type="submit">+ ADD TO COLLECTION</button></form><div class="vaultstats"><div class="stat"><strong id="vaultCount">0</strong><small>Cards saved</small></div><div class="stat"><strong id="vaultWorth">$0.00</strong><small>Estimated value</small></div><div class="stat"><strong id="vaultGain">$0.00</strong><small>Gain / loss</small></div></div><div class="tq-chart-panel"><div class="tq-chart-header"><div><h3>📈 Collection Value &amp; Profit History</h3><p class="note">Blue: current estimated collection value · Green: gain/loss versus each card’s first entered value.</p></div><div class="tq-chart-ranges"><button aria-pressed="false" data-tq-range="30" type="button">30D</button><button aria-pressed="false" data-tq-range="90" type="button">90D</button><button aria-pressed="true" data-tq-range="all" type="button">All</button></div></div><div class="tq-chart-legend"><span><i style="background:#3b82f6"></i> Collection value</span><span><i style="background:#22c55e"></i> Profit / loss</span></div><canvas aria-label="Line chart of collection value and profit history" id="tq-value-chart" role="img" style="display:block;width:100%;height:290px"></canvas><p class="note">Use <b>Update value</b> beside a card to record a new estimate. The original value stays fixed. History is recorded by day on this browser only; live marketplace prices are not connected. Adding or removing cards also changes portfolio totals.</p></div><div class="note" id="vaultEmpty">No cards yet. Add your first card above.</div><div class="vaultcards" id="vaultCards"></div><button class="btn secondary" id="exportVault" type="button">↓ EXPORT COLLECTION CSV</button></div></section><div class="glowline"></div><section class="tq-page" id="rewards" style="margin:70px 0"><div class="sectionhead"><div class="eyebrow">🏆 TCG QUEST REWARDS · DEMO</div><h2>Collect. Complete quests. <span style="color:var(--mint)">Earn rewards.</span></h2><p>Try the rewards system on this device. Demo points are not redeemable and do not qualify for real prizes. A verified account and secure server tracking are required before launching public awards.</p></div><div class="scanner"><div class="vaultstats"><div class="stat"><strong id="rewardXP">0</strong><small>Quest XP · ranking score</small></div><div class="stat"><strong id="rewardCoins">0</strong><small>Quest Coins · future rewards</small></div><div class="stat"><strong id="rewardStreak">0</strong><small>Daily quest streak</small></div></div><h3 style="margin-top:22px">Your quests</h3><div class="vaultcards" id="rewardQuests"></div><p class="note" id="rewardMessage" role="status"></p><h3>How points work</h3><p class="note">First verified new card: +10 XP / +2 coins. Condition assessment: +10 XP / +2 coins. Daily quest: +25 XP / +5 coins. Weekly challenge: +100 XP / +20 coins. Repeat scans and imported existing collections: 0 points. Card-related activity is capped at 30 XP/day; daily quests at 100 XP/day. These are proposed production rules; this demo awards only the daily and weekly quest points, not unverified scans or card claims.</p><h3>Proposed year-end Top 10 prizes</h3><p class="note">1st: $1,000 · 2nd: $500 · 3rd: $250 · 4th–10th: $50–$150 each. <strong>Illustrative only — no prizes are currently offered or guaranteed.</strong> A public competition would require published rules, eligibility, fraud review, tie-breaking, legal review, and funding.</p><button class="btn secondary" id="rewardExport" type="button">↓ EXPORT DEMO POINTS</button><p class="note">Saved only in this browser. Clearing browser data or switching devices may erase the demo balance. No real leaderboard or account sync yet.</p></div></section><section class="tq-page" id="features" style="margin-top:78px"><div class="sectionhead"><div class="eyebrow">MORE THAN A SCANNER</div><h2>Built for <span style="color:#bba0ff">collectors.</span></h2><p>The vision for TCG Quest goes beyond measuring cards. These are planned platform features, not yet connected to live market services.</p></div><div class="features"><div class="feature"><div class="ico">💎</div><h3>AI Grading Lab</h3><p>Measure centering today. Future releases will add validated condition analysis and estimated PSA grades.</p></div><div class="feature"><div class="ico">📈</div><h3>Collection &amp; Market</h3><p>Save your Pokémon, One Piece, and sports cards now. Live pricing and historical market data are planned.</p></div><div class="feature"><div class="ico">🏆</div><h3>Quests &amp; Rewards</h3><p>Future collector challenges, achievements, leaderboards, and community events.</p></div></div></section></main><div class="footer"><b>⚡ TCG QUEST</b> · The collector's next adventure. Experimental image measurements; not affiliated with or endorsed by PSA. No official PSA grade is issued.</div></div><script>document.querySelectorAll('.drop input').forEach(input=>{input.addEventListener('change',()=>{let file=input.files[0],box=input.parentElement;if(!file)return;let old=box.querySelector('img');if(old)old.remove();let img=document.createElement('img');img.src=URL.createObjectURL(file);img.alt='Selected card photo';box.insertBefore(img,input.nextSibling);box.querySelector('.symbol').style.display='none';box.querySelector('b').textContent=file.name;box.querySelector('small').textContent='Click to replace photo'});let box=input.parentElement;box.addEventListener('dragover',e=>{e.preventDefault();box.classList.add('drag')});box.addEventListener('dragleave',()=>box.classList.remove('drag'));box.addEventListener('drop',e=>{e.preventDefault();box.classList.remove('drag');if(e.dataTransfer.files.length){input.files=e.dataTransfer.files;input.dispatchEvent(new Event('change'))}})});document.getElementById('form').addEventListener('submit',async e=>{e.preventDefault();let btn=document.getElementById('submit'),err=document.getElementById('error');btn.disabled=true;btn.textContent='⌗ ANALYZING YOUR CARD…';err.textContent='';try{let r=await fetch('/api/measure',{method:'POST',body:new FormData(e.target)}),d=await r.json();if(!r.ok)throw Error(d.error||'Analysis failed');document.getElementById('reports').innerHTML=['front','back'].filter(k=>d[k]).map(k=>{let x=d[k],fmt=a=>a?a.join(' / '):'Unavailable';return `<div class="measurement"><h3>${k==='front'?'📸 Front':'🃏 Back'} Measurements</h3><img alt="Annotated card showing detected border lines" src="${x.annotated}"><div class="metrics"><div class="metric"><small>Left / Right</small><strong>${fmt(x.horizontal)}</strong></div><div class="metric"><small>Top / Bottom</small><strong>${fmt(x.vertical)}</strong></div></div><p class="note">Detection confidence: <b>${x.confidence}</b>. Verify that the yellow lines follow the actual printed frame. Values are relative pixel proportions, not millimeters.</p></div>`}).join('');document.getElementById('result').hidden=false;document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'})}catch(ex){err.textContent=ex.message}finally{btn.disabled=false;btn.textContent='⚡ ANALYZE CARD NOW →'}})</script><script>
+(function(){
+'use strict';
+const key='tcgquest-collection-v1', historyKey='tcgquest-value-history-v1';
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+const safe=n=>Number.isFinite(Number(n))&&Number(n)>=0?Number(n):0;
+const today=()=>new Date().toISOString().slice(0,10);
+let cards=[],history=[];
+try{const stored=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(stored))cards=stored.filter(c=>c&&typeof c.name==='string').slice(0,5000).map(c=>({...c,cost:safe(c.cost),value:safe(c.value),initialValue:safe(c.initialValue??c.value),addedAt:c.addedAt||today()}))}catch(e){}
+try{const stored=JSON.parse(localStorage.getItem(historyKey)||'[]');if(Array.isArray(stored))history=stored.filter(x=>x&&typeof x.date==='string'&&Number.isFinite(Number(x.value))&&Number.isFinite(Number(x.profit))).slice(-730)}catch(e){}
+const totals=()=>({value:cards.reduce((s,c)=>s+safe(c.value),0),baseline:cards.reduce((s,c)=>s+safe(c.initialValue),0)});
+function snapshot(){const t=totals(),entry={date:today(),value:Math.round(t.value*100)/100,profit:Math.round((t.value-t.baseline)*100)/100};if(history.length&&history[history.length-1].date===entry.date)history[history.length-1]=entry;else history.push(entry);history=history.slice(-730)}
+function persist(){try{localStorage.setItem(key,JSON.stringify(cards));localStorage.setItem(historyKey,JSON.stringify(history))}catch(e){alert('Browser storage is full or unavailable. Export your collection CSV for backup.')}}
+function save(){snapshot();persist();render()}
+function render(){
+const t=totals();document.getElementById('vaultCount').textContent=cards.length;
+document.getElementById('vaultWorth').textContent=money(t.value);
+document.getElementById('vaultGain').textContent=money(t.value-t.baseline);
+document.getElementById('vaultEmpty').hidden=cards.length>0;
+const root=document.getElementById('vaultCards');root.replaceChildren();
+cards.slice().reverse().forEach(c=>{
+const row=document.createElement('div');row.className='vaultcard tq-vault-row';
+const info=document.createElement('div');const name=document.createElement('b');name.textContent=c.name;
+const sub=document.createElement('small');sub.textContent=c.category+' · First entered '+money(c.initialValue)+' · Paid '+money(c.cost);info.append(name,sub);
+const val=document.createElement('span');val.className='value';val.textContent=money(c.value);
+const edit=document.createElement('button');edit.type='button';edit.textContent='Update value';edit.addEventListener('click',()=>{
+const answer=prompt('Current estimated value ($) for '+c.name,Number(c.value).toFixed(2));if(answer===null)return;
+const n=Number(answer);if(answer.trim()===''||!Number.isFinite(n)||n<0){alert('Enter a valid dollar amount of $0 or more.');return}
+const found=cards.find(x=>x.id===c.id);if(found){found.value=Math.round(n*100)/100;save()}
+});
+const del=document.createElement('button');del.textContent='Remove';del.type='button';del.setAttribute('aria-label','Remove '+c.name);del.addEventListener('click',()=>{cards=cards.filter(x=>x.id!==c.id);save()});
+row.append(info,val,edit,del);root.append(row)
+});
+draw();
+}
+const canvas=document.getElementById('tq-value-chart');
+let view='all';
+function draw(){
+if(!canvas)return;const box=canvas.getBoundingClientRect();const w=Math.max(320,Math.round(box.width||700)),h=290,dpr=Math.min(2,window.devicePixelRatio||1);
+canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+const margin={left:72,right:16,top:20,bottom:43},pw=w-margin.left-margin.right,ph=h-margin.top-margin.bottom;
+const cutoff=view==='30'?Date.now()-30*86400000:view==='90'?Date.now()-90*86400000:0;
+let data=history.filter(x=>new Date(x.date+'T23:59:59').getTime()>=cutoff);
+if(!data.length&&history.length)data=[history[history.length-1]];
+const yvals=data.flatMap(x=>[Number(x.value),Number(x.profit)]).concat([0]);
+let ymin=Math.min(...yvals,0),ymax=Math.max(...yvals,1);if(ymax===ymin)ymax=ymin+1;
+const pad=(ymax-ymin)*.08;ymin-=pad;ymax+=pad;
+const X=i=>margin.left+(data.length<2?pw/2:i*pw/(data.length-1));
+const Y=v=>margin.top+(ymax-v)*ph/(ymax-ymin);
+ctx.font='12px system-ui';ctx.textAlign='right';ctx.lineWidth=1;
+for(let i=0;i<=4;i++){const v=ymin+(ymax-ymin)*i/4,y=Y(v);ctx.strokeStyle='#ffffff1d';ctx.beginPath();ctx.moveTo(margin.left,y);ctx.lineTo(w-margin.right,y);ctx.stroke();ctx.fillStyle='#bdc8df';ctx.fillText((v<0?'−':'')+'$'+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0}),margin.left-10,y+4)}
+if(!data.length){ctx.fillStyle='#bdc8df';ctx.textAlign='center';ctx.fillText('Add a card to start tracking value history.',w/2,h/2);return}
+for(const [field,color] of [['value','#3b82f6'],['profit','#22c55e']]){
+ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();data.forEach((x,i)=>{const px=X(i),py=Y(Number(x[field]));if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)});ctx.stroke();
+if(data.length===1){ctx.fillStyle=color;ctx.beginPath();ctx.arc(X(0),Y(Number(data[0][field])),4,0,Math.PI*2);ctx.fill()}
+}
+ctx.fillStyle='#bdc8df';ctx.font='11px system-ui';ctx.textAlign='left';ctx.fillText(data[0].date,margin.left,h-15);ctx.textAlign='right';ctx.fillText(data[data.length-1].date,w-margin.right,h-15);
+}
+const filters=document.querySelectorAll('[data-tq-range]');filters.forEach(b=>b.addEventListener('click',()=>{view=b.dataset.tqRange;filters.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()}));
+window.addEventListener('resize',draw);
+document.getElementById('vaultForm').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('cardName').value.trim(),category=document.getElementById('cardCategory').value,cost=Number(document.getElementById('cardCost').value),value=Number(document.getElementById('cardValue').value);if(!name||![cost,value].every(Number.isFinite)||cost<0||value<0)return;cards.push({id:Date.now()+'-'+Math.random().toString(36).slice(2),name,category,cost,value,initialValue:value,addedAt:today()});save();e.target.reset()});
+document.getElementById('exportVault').addEventListener('click',()=>{const esc=v=>'"'+String(v).replace(/"/g,'""')+'"';const csv=[['Name','Category','Purchase Price','Initial Estimated Value','Current Estimated Value','Date Added'],...cards.map(c=>[c.name,c.category,c.cost,c.initialValue,c.value,c.addedAt])].map(r=>r.map(esc).join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='tcg-quest-collection.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)});
+if(cards.length&&!history.length){snapshot();persist()}
+render();
+})();
+</script><script>
+(function(){
+const status=document.getElementById('marketStatus'),results=document.getElementById('marketResults'),form=document.getElementById('marketForm');
+const query=document.getElementById('marketQuery');
+const controls=document.createElement('div');controls.className='tq-market-controls';
+controls.innerHTML=`<label>Card category <select id="tq-market-category"><option value="all">All cards</option><option value="pokemon">Pokémon</option><option value="onepiece">One Piece</option><option value="sports">Sports</option></select></label><label>Listing condition <select id="tq-market-condition"><option value="all">Any condition</option><option value="new">New</option><option value="used">Used</option></select></label><label>Sort results <select id="tq-market-sort"><option value="relevance">Default order</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label>`;
+form.after(controls);
+const summary=document.createElement('div');summary.className='tq-market-summary';controls.after(summary);
+const links=document.createElement('div');links.className='tq-market-links';summary.after(links);
+const escapeUrl=(url)=>url;
+function updateLinks(){const q=query.value.trim();links.replaceChildren();if(!q)return;for(const [label,base] of [['Search eBay','https://www.ebay.com/sch/i.html?_nkw='],['Search TCGplayer','https://www.tcgplayer.com/search/all/product?q='],['Search PriceCharting','https://www.pricecharting.com/search-products?type=prices&q=']]){const a=document.createElement('a');a.href=base+encodeURIComponent(q);a.target='_blank';a.rel='noopener noreferrer';a.textContent=label+' ↗';links.append(a)}}
+query.addEventListener('input',updateLinks);
+const source=document.getElementById('marketSource');source.innerHTML='<option value="ebay">eBay active listings</option>';source.disabled=true;
+fetch('/api/market/status').then(r=>r.json()).then(d=>{status.textContent=d.ebay_configured?'● eBay API connected — live listing search available':'○ eBay API not configured. External marketplace search links work without credentials.'}).catch(()=>{status.textContent='Marketplace status unavailable; external links still work.'});
+form.addEventListener('submit',async e=>{e.preventDefault();updateLinks();results.replaceChildren();summary.textContent='';status.textContent='Searching active eBay listings…';
+try{const params=new URLSearchParams({q:query.value.trim(),source:'ebay',category:document.getElementById('tq-market-category').value,condition:document.getElementById('tq-market-condition').value});const r=await fetch('/api/market/search?'+params);const data=await r.json();if(!r.ok)throw Error(data.error||'Search failed');status.textContent=data.disclaimer||'Active listing asking prices only.';
+const usd=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+if(data.stats){const x=data.stats;summary.textContent=`${x.count} active listings found`+(x.median_asking_usd!=null?` · Median asking price: ${usd(x.median_asking_usd)} · Range: ${usd(x.min_asking_usd)}–${usd(x.max_asking_usd)}`:'')+' · Not sold-price data';}
+let items=data.items||[];const sort=document.getElementById('tq-market-sort').value;if(sort!=='relevance')items=items.slice().sort((a,b)=>{const aa=a.price==null?(sort==='low'?Infinity:-Infinity):a.price,bb=b.price==null?(sort==='low'?Infinity:-Infinity):b.price;return sort==='low'?aa-bb:bb-aa});
+if(!items.length){status.textContent+=' No listings found.';return;}
+for(const x of items){const card=document.createElement('article');card.className='marketitem';if(x.image&&/^https:\/\//.test(x.image)){const img=document.createElement('img');img.src=x.image;img.alt=x.title;img.loading='lazy';card.append(img)}const name=document.createElement('h3');name.textContent=x.title;card.append(name);const price=document.createElement('strong');try{price.textContent=x.price!=null?new Intl.NumberFormat('en-US',{style:'currency',currency:x.currency||'USD'}).format(x.price):'Price unavailable'}catch{price.textContent=String(x.price??'Price unavailable')}card.append(price);const note=document.createElement('p');note.className='note';note.textContent='Seller asking price'+(x.shipping!=null?' · Shipping '+usd(x.shipping):' · Shipping varies')+(x.condition?' · '+x.condition:'');card.append(note);if(x.url&&/^https:\/\//.test(x.url)){const link=document.createElement('a');link.href=x.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='View listing ↗';card.append(link)}results.append(card)}
+}catch(err){status.textContent=err.message+' You can still use the external marketplace links.'}});
+})();
+</script><script>
+/* TCG Quest V3 interactive centering editor — front and back independently. */
+(()=>{
+const style=document.createElement('style');style.textContent=`
+.tq-editor{position:relative;max-width:390px;margin:0 auto;touch-action:none;user-select:none;background:#080c18;border-radius:12px;overflow:hidden}
+.tq-editor img{display:block;width:100%;height:auto;max-height:none;object-fit:fill}
+.tq-editor svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;overflow:visible}
+.tq-editor .green{stroke:#4aff7c;stroke-width:3;fill:none;vector-effect:non-scaling-stroke}
+.tq-editor .yellow{stroke:#ffe04b;stroke-width:2.5;vector-effect:non-scaling-stroke}
+.tq-editor .handle{stroke:#101a25;stroke-width:2;cursor:grab;vector-effect:non-scaling-stroke}
+.tq-editor .handle:active{cursor:grabbing}
+.tq-editor .hit{stroke:transparent;stroke-width:26;cursor:grab;vector-effect:non-scaling-stroke}
+.tq-controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tq-controls button{border:1px solid #65718b;background:#1a2740;color:white;padding:9px 12px;border-radius:10px;cursor:pointer;font:600 13px inherit}
+.tq-help{font-size:13px;color:#c7d1e7;line-height:1.55;margin:10px 0}.tq-warn{font-size:12px;color:#ffcf86;margin-top:9px}
+`;document.head.append(style);
+const svgNS='http://www.w3.org/2000/svg';
+const mk=(tag,attrs={},text)=>{let e=document.createElementNS(svgNS,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(text)e.textContent=text;return e};
+const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+const pct=(a,b)=>a+b>0?`${(100*a/(a+b)).toFixed(1)} / ${(100*b/(a+b)).toFixed(1)}`:'Unavailable';
+function createEditor(side,data){
+ const outer=document.createElement('div');outer.className='measurement';
+ const heading=document.createElement('h3');heading.textContent=side==='front'?'📸 Front — adjustable measurements':'🃏 Back — adjustable measurements';outer.append(heading);
+ const help=document.createElement('p');help.className='tq-help';help.textContent='Drag GREEN corner dots to the outside card corners. Drag YELLOW lines (or their dots) to the printed frame. Adjust each side independently.';outer.append(help);
+ const stage=document.createElement('div');stage.className='tq-editor';
+ const photo=document.createElement('img');photo.alt='Card photo for manual border adjustment';photo.src=data.clean_image||data.annotated;photo.draggable=false;stage.append(photo);
+ const svg=mk('svg',{viewBox:'0 0 600 840',role:'group','aria-label':'Adjustable card edges and printed frame'});stage.append(svg);outer.append(stage);
+ const defaults={l:48,r:552,t:55,b:785};let state={corners:Array.isArray(data.auto_corners)&&data.auto_corners.length===4?data.auto_corners:[[5,5],[594,5],[594,834],[5,834]],...defaults};
+ // Use detected printed edges only when all four passed backend consistency checks.
+ const p=data.border_pixels||{};
+ if(['left','right','top','bottom'].every(k=>Number.isFinite(p[k]))){state.l=p.left;state.r=599-p.right;state.t=p.top;state.b=839-p.bottom;}
+ const initial=JSON.parse(JSON.stringify(state));
+ let verified=false;
+ const metrics=document.createElement('div');metrics.className='metrics';const lr=document.createElement('div'),tb=document.createElement('div');lr.className=tb.className='metric';metrics.append(lr,tb);outer.append(metrics);
+ const warning=document.createElement('p');warning.className='tq-warn';warning.textContent='Manual estimate only. Initial yellow positions may be placeholders. Align ALL six edges before using results. Not a PSA grade.';outer.append(warning);
+ const controls=document.createElement('div');controls.className='tq-controls';
+ const confirm=document.createElement('label');confirm.className='tq-help';confirm.style.display='block';const check=document.createElement('input');check.type='checkbox';confirm.append(check,document.createTextNode(' I checked the green outside edges and all four yellow printed-border lines.'));outer.append(confirm);check.addEventListener('change',()=>{verified=check.checked;render()});
+ const reset=document.createElement('button');reset.type='button';reset.textContent='↺ Reset to automatic';reset.onclick=()=>{state=JSON.parse(JSON.stringify(initial));verified=false;check.checked=false;render()};controls.append(reset);
+ const instructions=document.createElement('button');instructions.type='button';instructions.textContent='How to adjust';instructions.onclick=()=>alert('GREEN: move each of the four corner dots to the physical card corner. YELLOW: drag the left, right, top, and bottom lines to the printed border. Results recalculate immediately. Use front and back separately.');controls.append(instructions);outer.append(controls);
+ let active=null;
+ function line(x1,y1,x2,y2,color,kind,index){
+   const attrs={x1,y1,x2,y2};const visible=mk('line',{...attrs,class:color});svg.append(visible);
+   if(kind){const hit=mk('line',{...attrs,class:'hit','data-kind':kind,'data-index':index??''});svg.append(hit)}
+ }
+ function circle(x,y,color,kind,index){const dot=mk('circle',{cx:x,cy:y,r:8,fill:color,class:'handle','data-kind':kind,'data-index':index??''});svg.append(dot)}
+ function render(){
+  svg.replaceChildren();let c=state.corners;
+  for(let i=0;i<4;i++){const a=c[i],b=c[(i+1)%4];line(a[0],a[1],b[0],b[1],'green');}
+  for(let i=0;i<4;i++)circle(...c[i],'#4aff7c','corner',i);
+  // Yellow lines are separately draggable in x/y, with generous touch targets.
+  for(const [kind,pos] of [['l',state.l],['r',state.r]]){line(pos,0,pos,840,'yellow',kind);circle(pos,420,'#ffe04b',kind)}
+  for(const [kind,pos] of [['t',state.t],['b',state.b]]){line(0,pos,600,pos,'yellow',kind);circle(300,pos,'#ffe04b',kind)}
+  // Evaluate the outer edges at the center of each side to account for skew.
+  const left=(c[0][0]+c[3][0])/2,right=(c[1][0]+c[2][0])/2;
+  const top=(c[0][1]+c[1][1])/2,bottom=(c[2][1]+c[3][1])/2;
+  const valid=left+3<state.l&&state.l+3<state.r&&state.r+3<right&&top+3<state.t&&state.t+3<state.b&&state.b+3<bottom;
+  lr.innerHTML='<small>Left / Right</small><strong>'+ (valid?pct(state.l-left,right-state.r):'Adjust lines')+'</strong>';
+  tb.innerHTML='<small>Top / Bottom</small><strong>'+ (valid?pct(state.t-top,bottom-state.b):'Adjust lines')+'</strong>';
+  const horiz=valid?[100*(state.l-left)/(state.l-left+right-state.r),100*(right-state.r)/(state.l-left+right-state.r)]:null;
+  const vert=valid?[100*(state.t-top)/(state.t-top+bottom-state.b),100*(bottom-state.b)/(state.t-top+bottom-state.b)]:null;
+  window.dispatchEvent(new CustomEvent('tq-centering-change',{detail:{side,verified:verified&&valid,horizontal:horiz,vertical:vert}}));
+  warning.textContent=valid?'User-adjusted pixel estimate (not calibrated or PSA-certified). Confirm both green and yellow positions visually before relying on the ratios.':'Yellow frame lines must stay inside the green card edges. Adjust the lines to continue.';
+ }
+ const position=e=>{let box=svg.getBoundingClientRect();return [clamp((e.clientX-box.left)*600/box.width,0,599),clamp((e.clientY-box.top)*840/box.height,0,839)]};
+ svg.addEventListener('pointerdown',e=>{let target=e.target.closest('[data-kind]');if(!target)return;active={kind:target.dataset.kind,index:Number(target.dataset.index)};svg.setPointerCapture(e.pointerId);e.preventDefault()});
+ svg.addEventListener('pointermove',e=>{if(!active)return;let [x,y]=position(e);if(active.kind==='corner')state.corners[active.index]=[x,y];else if(active.kind==='l')state.l=clamp(x,0,state.r-8);else if(active.kind==='r')state.r=clamp(x,state.l+8,599);else if(active.kind==='t')state.t=clamp(y,0,state.b-8);else if(active.kind==='b')state.b=clamp(y,state.t+8,839);render();e.preventDefault()});
+ svg.addEventListener('pointerup',()=>active=null);svg.addEventListener('pointercancel',()=>active=null);render();return outer;
+}
+const form=document.querySelector('form:has(#submit)');
+if(!form)return;
+form.addEventListener('submit',async e=>{
+ e.preventDefault();e.stopImmediatePropagation();
+ const button=document.getElementById('submit'),error=document.getElementById('error');button.disabled=true;button.textContent='⌗ ANALYZING YOUR CARD…';error.textContent='';
+ try{const response=await fetch('/api/measure',{method:'POST',body:new FormData(form)});const data=await response.json();if(!response.ok)throw Error(data.error||'Analysis failed');
+ const reports=document.getElementById('reports');reports.replaceChildren();for(const side of ['front','back'])if(data[side])reports.append(createEditor(side,data[side]));
+ const result=document.getElementById('result');result.hidden=false;result.scrollIntoView({behavior:'smooth',block:'start'});
+ }catch(ex){error.textContent=ex.message||'Scanner failed';}finally{button.disabled=false;button.textContent='⚡ ANALYZE CARD NOW →'}
+},true);
+})();
+
+</script><script>
+/* Unofficial condition assistant. No learned model, PSA affiliation or guaranteed grade. */
+(()=>{
+const style=document.createElement('style');style.textContent=`
+.tq-grade{margin:22px 0;padding:22px;border:1px solid #9e77ff77;border-radius:18px;background:#151b32}
+.tq-grade h3{margin:0 0 9px;color:#d5c3ff}.tq-grade .sub{color:#b9c4da;font-size:13px;line-height:1.6}
+.tq-grade-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.tq-grade label{display:block;font-size:13px;color:#d7e1f2}.tq-grade select{display:block;width:100%;margin-top:7px;background:#090f21;color:#fff;border:1px solid #67728c;border-radius:9px;padding:10px}
+.tq-grade-result{background:#0b1225;border:1px solid #67728c;border-radius:12px;padding:17px;margin-top:15px;line-height:1.6}
+.tq-grade-result strong{color:#66ffc1;font-size:24px}.tq-grade button{margin-top:10px;background:#66ffc1;border:0;border-radius:9px;padding:11px 15px;font-weight:800;cursor:pointer}
+@media(max-width:700px){.tq-grade-grid{grid-template-columns:1fr}}
+`;document.head.append(style);
+const scores={unknown:null,excellent:9,minor:7,visible:5,major:2};
+const state={front:null,back:null};let qualities={};
+const container=document.createElement('section');container.className='tq-grade';container.id='tq-grading';
+container.innerHTML=`<h3>🔬 Unofficial Condition & Grade Assistant</h3>
+<p class="sub">Computer vision helps measure centering and flag potentially blurry/glary photos. You review visible corner, edge and surface condition. The estimate below is a <b>rules-based educational range</b>, not a trained AI prediction, professional inspection or PSA grade. Hidden defects, authenticity and print quality cannot be assessed.</p>
+<div id="tq-photo-quality" class="sub">Upload and scan front and back photos to begin.</div>
+<div class="tq-grade-grid" id="tq-grade-inputs"></div>
+<div class="tq-grade-result" id="tq-grade-output" aria-live="polite">Scan both sides, verify the green/yellow lines, and assess condition to see a provisional range.</div>
+<button type="button" id="tq-grade-recalc">Recalculate estimate</button>`;
+const result=document.getElementById('result');result.append(container);
+const names=[['corners','Corners'],['edges','Edges'],['surface','Surface']];
+const grid=container.querySelector('#tq-grade-inputs');
+for(const [key,label] of names){const field=document.createElement('label');field.textContent=label+' (both sides)';const select=document.createElement('select');select.id='tq-condition-'+key;
+for(const [value,text] of [['unknown','Select observed condition'],['excellent','No visible damage under close inspection'],['minor','Minor wear or tiny imperfections'],['visible','Noticeable wear / scratches / whitening'],['major','Major wear, creases or damage']]){const o=document.createElement('option');o.value=value;o.textContent=text;select.append(o)}field.append(select);grid.append(field);select.addEventListener('change',recalculate)}
+const out=container.querySelector('#tq-grade-output');
+function recalculate(){
+const values=names.map(([key])=>scores[document.getElementById('tq-condition-'+key).value]);
+if(!state.front||!state.back){out.textContent='Scan both sides of the card to estimate a range. No grade has been calculated.';return}
+if(!state.front.verified||!state.back.verified){out.textContent='Confirm the green card edges and yellow printed borders on BOTH front and back first. Centering must be verified before estimating.';return}
+if(values.some(v=>v===null)){out.textContent='Choose an observed condition for corners, edges and surface. No estimate until all are assessed.';return}
+const sides=[state.front,state.back];
+if(sides.some(s=>!s.horizontal||!s.vertical)){out.textContent='Centering unavailable. Adjust the lines before estimating.';return}
+// Asymmetry is maximum departure from 50% on any measured axis/side.
+const asym=Math.max(...sides.flatMap(s=>[Math.abs(s.horizontal[0]-50),Math.abs(s.vertical[0]-50)]));
+// Conservative illustrative heuristic; not PSA thresholds or learned probabilities.
+let centeringCeiling=asym<=5?10:asym<=10?9:asym<=15?8:asym<=20?7:asym<=25?6:5;
+let conditionCeiling=Math.min(...values)+1;
+let ceiling=Math.min(10,centeringCeiling,conditionCeiling);
+const floor=Math.max(1,ceiling-2);
+const poor=Object.values(qualities).some(q=>q&&(q.sharpness_flag==='review'||q.glare_flag==='review'));
+out.replaceChildren();const heading=document.createElement('strong');heading.textContent='Illustrative grade range: '+floor+'–'+ceiling+' / 10';out.append(heading);
+const text=document.createElement('p');text.textContent='Based on your verified centering positions and self-reported condition. Worst centering departure: '+asym.toFixed(1)+' percentage points from 50/50. This is a simple heuristic, not a calibrated PSA prediction.';out.append(text);
+if(poor){const warn=document.createElement('p');warn.textContent='⚠ Photo-quality warning: possible blur or glare may conceal defects. Retake photos before relying on this estimate.';out.append(warn)}
+const caveat=document.createElement('small');caveat.textContent='Actual professional grading may be higher or lower. Surface scratches, print lines, dents, authenticity and hidden defects require further inspection.';out.append(caveat);
+}
+container.querySelector('#tq-grade-recalc').addEventListener('click',recalculate);
+window.addEventListener('tq-centering-change',e=>{state[e.detail.side]=e.detail;recalculate()});
+const form=document.getElementById('form');form.addEventListener('submit',async()=>{state.front=null;state.back=null;qualities={};out.textContent='Analyzing photos…';},false);
+// Read image quality from the same backend response without duplicating requests.
+const nativeFetch=window.fetch.bind(window);
+window.fetch=async (...args)=>{const response=await nativeFetch(...args);if(String(args[0]).includes('/api/measure')&&response.ok){response.clone().json().then(data=>{qualities={front:data.front?.photo_quality,back:data.back?.photo_quality};const q=container.querySelector('#tq-photo-quality');q.textContent=['front','back'].filter(side=>qualities[side]).map(side=>{const v=qualities[side];return side.toUpperCase()+': focus '+(v.sharpness_flag==='review'?'needs review':'appears acceptable')+', possible glare '+v.possible_glare_percent+'%';}).join(' | ')+' (Photo quality is not a condition grade.)';recalculate()}).catch(()=>{})}return response};
+})();
+</script>
+<style>
+.tq-identify{margin:22px 0;padding:22px;border:1px solid #66ffc188;border-radius:18px;background:#121e30}
+.tq-identify h3{margin:0 0 8px;color:#66ffc1}.tq-identify p{color:#b9c4da;font-size:14px;line-height:1.5}
+.tq-identify button{border:0;border-radius:11px;background:#66ffc1;color:#06121a;font-weight:800;padding:13px 19px;cursor:pointer}
+.tq-identify button:disabled{opacity:.5;cursor:wait}.tq-id-output{margin-top:13px;padding:13px;background:#0a1021;border-radius:10px;white-space:pre-wrap;line-height:1.7}
+.tq-id-output strong{color:#66ffc1}.tq-id-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+</style>
+<script>
+(()=>{
+const scanner=document.querySelector('#scanner .scanner');if(!scanner)return;
+const section=document.createElement('section');section.className='tq-identify';section.id='tq-identification';
+section.innerHTML=`<h3>🃏 Identify Your Card from a Photo</h3>
+<p>Supports Pokémon, One Piece and sports card photos. Automatically identifies your front photo when AI is configured. Results are suggestions, not verified catalog matches; check the set, number and variant.</p>
+<div id="tq-id-status" class="note">Checking photo identification availability…</div>
+<div class="tq-id-actions"><button type="button" id="tq-id-btn">🔎 RETRY IDENTIFICATION</button></div>
+<div class="tq-id-output" id="tq-id-output" aria-live="polite">Upload a front photo to identify it automatically and fill marketplace searches.</div>`;
+const form=document.getElementById('form');form.after(section);
+const status=section.querySelector('#tq-id-status'),output=section.querySelector('#tq-id-output'),btn=section.querySelector('#tq-id-btn');
+const photoInput=form.querySelector('input[name="front"]');
+let enabled=false, sequence=0, activeController=null, lastFile=null;
+const compose=d=>[d.name,d.number,d.set,d.variant].filter(v=>typeof v==='string'&&v.trim()).join(' ').trim();
+function sendToPrices(q){if(!q)return;window.tcgQuestCompareCard?.(q,{scroll:false});}
+async function identify(file){
+ if(!file)return;
+ const current=++sequence;
+ if(activeController)activeController.abort();
+ activeController=new AbortController();
+ btn.disabled=true;
+ output.textContent='Identifying your card and preparing marketplace searches…';
+ try{
+  const fd=new FormData();fd.append('front',file);
+  const response=await fetch('/api/identify',{method:'POST',body:fd,signal:activeController.signal});
+  const d=await response.json();if(!response.ok)throw Error(d.error||'Identification failed');
+  if(current!==sequence)return;
+  output.replaceChildren();
+  const title=document.createElement('strong');title.textContent=(d.name||'Unknown card')+' — '+(d.category||'Unknown category');output.append(title);
+  for(const [label,value] of [['Set',d.set],['Card number',d.number],['Year',d.year],['Variant',d.variant],['Confidence',d.confidence],['Visible clues',d.evidence],['Review',d.caveat]]){
+   if(value){const row=document.createElement('div');row.textContent=label+': '+value;output.append(row)}
+  }
+  const note=document.createElement('p');note.textContent=d.disclaimer||'Confirm the exact card and variant before relying on price searches.';output.append(note);
+  if(d.name){
+   const q=compose(d);sendToPrices(q);
+   const confirmation=document.createElement('p');confirmation.textContent='✓ Marketplace searches filled automatically. Review the identification and edit the search if needed.';output.append(confirmation);
+   const compareBtn=document.createElement('button');compareBtn.type='button';compareBtn.textContent='💰 View price comparison';compareBtn.addEventListener('click',()=>window.tcgQuestCompareCard?.(q,{scroll:true}));output.append(compareBtn);
+   const action=document.createElement('button');action.type='button';action.textContent='Use name in My Collection';action.addEventListener('click',()=>{const input=document.getElementById('cardName');if(input){input.value=[d.name,d.number,d.set].filter(Boolean).join(' · ');document.getElementById('collection')?.scrollIntoView({behavior:'smooth'})}});output.append(action);
+  }else{output.append(document.createTextNode(' Could not identify this card. Enter its name manually in Compare Card Prices.'))}
+ }catch(e){if(current!==sequence||e.name==='AbortError')return;output.textContent='Automatic identification unavailable: '+e.message+'. You can enter the card name manually in Compare Card Prices.'}
+ finally{if(current===sequence){btn.disabled=!enabled;activeController=null}}
+}
+// The front photo triggers identification immediately, without requiring Analyze or Identify buttons.
+photoInput?.addEventListener('change',()=>{
+ const file=photoInput.files?.[0];if(!file)return;
+ if(file===lastFile)return;lastFile=file;
+ if(!enabled){output.textContent='Automatic card identification needs OPENAI_API_KEY in Render. You can still search prices manually.';return}
+ identify(file);
+});
+btn.addEventListener('click',()=>{const file=photoInput?.files?.[0];if(!file){output.textContent='Upload a front photo first.';return}identify(file)});
+fetch('/api/identify/status').then(r=>r.json()).then(d=>{
+ enabled=!!d.available;
+ status.textContent=enabled?'● Auto-identification enabled. Uploading a front photo starts an AI request (API charges may apply).':'○ Auto-identification requires OPENAI_API_KEY in Render. Manual price searches remain available.';
+ btn.disabled=!enabled;
+ if(enabled&&photoInput?.files?.[0]){lastFile=photoInput.files[0];identify(lastFile)}
+}).catch(()=>{status.textContent='Identification service unavailable; use manual price search.';btn.disabled=true});
+})();
+</script>
+<style>.tq-market-controls{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}.tq-market-controls label{flex:1;min-width:170px;color:#c8d0e7;font-size:13px}.tq-market-controls select{display:block;width:100%;margin-top:7px;background:#090e1e;border:1px solid #66708f;border-radius:10px;color:white;padding:12px}.tq-market-summary{font-weight:700;color:#66ffc1;margin:15px 0}.tq-market-links{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 20px}.tq-market-links a{color:#a9ddff;border:1px solid #66708f;border-radius:9px;padding:10px 12px;text-decoration:none}</style><script>
+(()=>{'use strict';
+const KEY='tcgQuestRewardsDemoV1';const day=()=>new Date().toLocaleDateString('en-CA');
+const week=()=>{const d=new Date(),u=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));u.setUTCDate(u.getUTCDate()+4-(u.getUTCDay()||7));const y=new Date(Date.UTC(u.getUTCFullYear(),0,1));return u.getUTCFullYear()+'-W'+String(Math.ceil((((u-y)/86400000)+1)/7)).padStart(2,'0')};
+function read(){try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');return {xp:Math.max(0,Number(s.xp)||0),coins:Math.max(0,Number(s.coins)||0),days:Array.isArray(s.days)?s.days:[],weeks:Array.isArray(s.weeks)?s.weeks:[]}}catch{return {xp:0,coins:0,days:[],weeks:[]}}}
+let state=read();const quests=document.getElementById('rewardQuests'),message=document.getElementById('rewardMessage');
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function streak(){let count=0,d=new Date();if(!state.days.includes(day()))d.setDate(d.getDate()-1);while(state.days.includes(d.toLocaleDateString('en-CA'))){count++;d.setDate(d.getDate()-1)}return count}
+function claim(kind){const today=day(),thisWeek=week();if(kind==='daily'){if(state.days.includes(today))return;state.days.push(today);state.xp+=25;state.coins+=5;message.textContent='Daily quest complete: +25 XP and +5 coins (demo).'}else{if(state.weeks.includes(thisWeek))return;state.weeks.push(thisWeek);state.xp+=100;state.coins+=20;message.textContent='Weekly challenge complete: +100 XP and +20 coins (demo).'}save();render()}
+function render(){document.getElementById('rewardXP').textContent=state.xp.toLocaleString();document.getElementById('rewardCoins').textContent=state.coins.toLocaleString();document.getElementById('rewardStreak').textContent=streak();quests.replaceChildren();for(const [kind,label,desc,claimed] of [['daily','Daily collector check-in','Complete once per day · +25 XP / +5 coins',state.days.includes(day())],['weekly','Weekly collector challenge','Complete once per calendar week · +100 XP / +20 coins',state.weeks.includes(week())]]){const card=document.createElement('div');card.className='feature';const h=document.createElement('h3');h.textContent=label;const p=document.createElement('p');p.textContent=desc;const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=claimed?'✓ Completed':'Claim demo points';b.disabled=claimed;b.addEventListener('click',()=>claim(kind));card.append(h,p,b);quests.append(card)}}
+document.getElementById('rewardExport').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({notice:'Nonredeemable local demo points only',...state},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='tcg-quest-demo-points.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});render();
+})();
+</script>
+<style>
+.tq-price-panel{margin:24px 0;padding:24px;border:1px solid #66ffc188;border-radius:20px;background:linear-gradient(125deg,#102338,#17152e);color:#f1f5ff}
+.tq-price-panel h3{margin:0 0 8px;color:#66ffc1}.tq-price-form{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.tq-price-form input{flex:1;min-width:220px;background:#080f20;border:1px solid #697590;border-radius:10px;color:#fff;padding:12px;font:inherit}.tq-price-form button{background:#66ffc1;color:#07171d;border:0;border-radius:10px;padding:12px 20px;font-weight:800;cursor:pointer}
+.tq-price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.tq-price-tile{border:1px solid #ffffff32;background:#0a1124;border-radius:14px;padding:16px;color:#e9f4ff;text-decoration:none;display:block}.tq-price-tile:hover{border-color:#66ffc1}.tq-price-tile strong{display:block;font-size:23px;margin:10px 0;color:#66ffc1}.tq-price-tile small{display:block;color:#b7c3da;line-height:1.5}.tq-price-panel .tq-price-note{color:#c0cde1;font-size:13px;line-height:1.6;margin-top:14px}
+</style>
+<script>
+(()=>{'use strict';
+const market=document.getElementById('market');if(!market)return;
+const panel=document.createElement('section');panel.className='tq-price-panel';panel.id='tq-price-comparison';
+panel.innerHTML='<h3>💰 Compare Card Prices</h3><p>Search one card across eBay, PriceCharting and TCGplayer. Click any source to open its matching search. Exact edition and condition must be checked.</p><form class="tq-price-form" id="tq-price-form"><input id="tq-price-query" aria-label="Card name, set and number" placeholder="e.g. Espurr 42/146 XY" required minlength="2"><select id="tq-price-category" aria-label="Card category" style="padding:12px;border-radius:10px;background:#0a1124;color:white;border:1px solid #52617b"><option value="auto">Auto detect</option><option value="pokemon">Pokémon</option><option value="onepiece">One Piece</option><option value="sports">Sports Cards</option></select><select id="tq-price-sport" aria-label="Sport" hidden style="padding:12px;border-radius:10px;background:#0a1124;color:white;border:1px solid #52617b"><option value="all">All sports</option><option value="baseball">Baseball</option><option value="basketball">Basketball</option><option value="football">Football</option><option value="hockey">Hockey</option><option value="soccer">Soccer</option><option value="golf">Golf</option><option value="tennis">Tennis</option><option value="racing">Racing</option><option value="wrestling">Wrestling</option><option value="boxing">Boxing</option><option value="ufc">UFC</option></select><button type="submit">COMPARE PRICES</button></form><div id="tq-price-grid" class="tq-price-grid" aria-live="polite"></div><p class="tq-price-note">eBay price is the lowest returned active listing asking price, not a sold price or guaranteed match. PriceCharting and TCGplayer prices require licensed/approved data access; no invented numbers are displayed.</p>';
+market.prepend(panel);
+const form=panel.querySelector('#tq-price-form'),input=panel.querySelector('#tq-price-query'),grid=panel.querySelector('#tq-price-grid');
+const categorySelect=panel.querySelector('#tq-price-category'),sportSelect=panel.querySelector('#tq-price-sport');
+categorySelect.addEventListener('change',()=>{sportSelect.hidden=categorySelect.value!=='sports'});
+function detectCategory(q){if(/\b(pokemon|pokémon|charizard|pikachu|espurr)\b/i.test(q))return 'pokemon';if(/\b(one piece|luffy|zoro|nami|op-\d+)\b/i.test(q))return 'onepiece';if(/\b(baseball|basketball|football|hockey|soccer|golf|tennis|ufc|wrestling|racing|boxing|topps|panini|prizm|rookie|nfl|nba|mlb|nhl)\b/i.test(q))return 'sports';return 'auto'}
+function sportsLanding(sport){return sport==='all'?'https://www.pricecharting.com/category/sports-cards':'https://www.pricecharting.com/category/'+encodeURIComponent(sport)+'-cards'}
+function categoryFor(q){return categorySelect.value==='auto'?detectCategory(q):categorySelect.value}
+const sources=[{name:'eBay',base:'https://www.ebay.com/sch/i.html?_nkw=',hint:'Active seller asking prices'},{name:'PriceCharting',base:'https://www.pricecharting.com/search-products?type=prices&q=',hint:'View price guide at source'},{name:'TCGplayer',base:'https://www.tcgplayer.com/search/all/product?q=',hint:'View marketplace prices at source'}];
+function tile(src,q){const a=document.createElement('a');a.className='tq-price-tile';a.target='_blank';a.rel='noopener noreferrer';const sports=src.name==='PriceCharting'&&categoryFor(q)==='sports';a.href=sports?sportsLanding(sportSelect.value):src.base+encodeURIComponent(q);const name=document.createElement('b');name.textContent=src.name+' ↗';const price=document.createElement('strong');price.textContent=sports?'Browse sports cards':'View prices';const hint=document.createElement('small');hint.textContent=sports?'Opens PriceCharting sports card list; search the exact player and set there':src.hint;a.append(name,price,hint);grid.append(a);return {a,price,hint}}
+async function compare(q){grid.replaceChildren();const tiles=sources.map(src=>tile(src,q));tiles[0].price.textContent='Checking…';try{const r=await fetch('/api/market/search?'+new URLSearchParams({q,source:'ebay'}));const data=await r.json();if(!r.ok)throw Error(data.error||'eBay lookup unavailable');const valid=(data.items||[]).filter(x=>x.price!==null&&Number.isFinite(Number(x.price))&&Number(x.price)>=0&&(!x.currency||x.currency==='USD'));if(!valid.length){tiles[0].price.textContent='No prices found';return}const cheapest=valid.reduce((a,b)=>Number(a.price)<=Number(b.price)?a:b);tiles[0].price.textContent='From '+new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(cheapest.price));tiles[0].hint.textContent='Lowest of '+valid.length+' returned listings · may be a different variant';if(cheapest.url&&/^https:\/\/(www\.)?ebay\.com\//i.test(cheapest.url)){tiles[0].a.href=cheapest.url;tiles[0].hint.textContent+=' · Open lowest listing'}}catch(e){tiles[0].price.textContent='See eBay';tiles[0].hint.textContent='Live quote unavailable · open eBay search'}}
+form.addEventListener('submit',e=>{e.preventDefault();const q=input.value.trim();if(q.length>1)compare(q)});
+categorySelect.addEventListener('change',()=>{if(input.value.trim().length>1)compare(input.value.trim())});sportSelect.addEventListener('change',()=>{if(input.value.trim().length>1)compare(input.value.trim())});
+window.tcgQuestCompareCard=function(q,options={}){if(typeof q!=='string'||!q.trim())return;input.value=q;if(options.category){const c=String(options.category).toLowerCase();if(c.includes('sport'))categorySelect.value='sports';else if(c.includes('pok'))categorySelect.value='pokemon';else if(c.includes('one piece'))categorySelect.value='onepiece';sportSelect.hidden=categorySelect.value!=='sports'}compare(q);if(options.scroll!==false)panel.scrollIntoView({behavior:'smooth',block:'start'})};
+})();
+</script>
+<script>
+(function(){
+ const sections={home:'tq-home',collection:'collection',scanner:'scanner',grading:'scanner',prices:'market',market:'market',rewards:'rewards',features:'features'};
+ const tabs=document.getElementById('tq-tabs');
+ function openTab(name,scroll=true){name=sections[name]?name:'home';for(const page of document.querySelectorAll('.tq-page'))page.classList.toggle('tq-active',page.id===sections[name]);for(const link of tabs.querySelectorAll('[data-tab]')){if(link.dataset.tab===name)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')};tabs.classList.remove('tq-open');document.getElementById('tq-menu-toggle').setAttribute('aria-expanded','false');if(scroll){window.scrollTo({top:0,behavior:'instant'});if(name==='grading'){const target=document.getElementById('tq-grade-inputs');target?.scrollIntoView({block:'center'})}if(name==='prices'){document.getElementById('tq-price-form')?.scrollIntoView({block:'center'})}}updateStats()}
+ function route(){const name=decodeURIComponent(location.hash.slice(1));openTab(name,false)}
+ document.getElementById('tq-menu-toggle').addEventListener('click',()=>{const on=tabs.classList.toggle('tq-open');document.getElementById('tq-menu-toggle').setAttribute('aria-expanded',String(on))});
+ document.addEventListener('click',e=>{const button=e.target.closest('[data-go]');if(button){location.hash=button.dataset.go;openTab(button.dataset.go);return}const a=e.target.closest('a[href^="#"]');if(!a)return;const hash=a.getAttribute('href').slice(1);if(sections[hash]){e.preventDefault();history.pushState(null,'','#'+hash);openTab(hash)}else if(a.closest('.tq-page')){const section=a.closest('.tq-page');if(section){section.classList.add('tq-active');setTimeout(()=>document.getElementById(hash)?.scrollIntoView({behavior:'smooth'}),30)}}});
+ window.addEventListener('hashchange',route);route();
+ const KEY='tcg-quest-profile-v1', img=document.getElementById('tq-profile-image'), placeholder=document.getElementById('tq-profile-placeholder'), profile=document.querySelector('.tq-profile'), animated=document.getElementById('tq-profile-animate');
+ function apply(data){if(data?.image){img.src=data.image;img.hidden=false;placeholder.hidden=true}else{img.removeAttribute('src');img.hidden=true;placeholder.hidden=false}animated.checked=!!data?.animated;profile.classList.toggle('tq-animated',animated.checked)}
+ function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch{return {}}}
+ function store(obj){try{localStorage.setItem(KEY,JSON.stringify(obj));return true}catch{alert('Photo could not be saved in this browser. Try a smaller photo.');return false}}
+ apply(load());
+ async function choose(file){if(!file)return;if(!file.type.startsWith('image/')){alert('Choose a photo file.');return}try{const url=URL.createObjectURL(file);const original=new Image();original.onload=()=>{const canvas=document.createElement('canvas');canvas.width=canvas.height=420;const ctx=canvas.getContext('2d');const side=Math.min(original.naturalWidth,original.naturalHeight);ctx.drawImage(original,(original.naturalWidth-side)/2,(original.naturalHeight-side)/2,side,side,0,0,420,420);const data={...load(),image:canvas.toDataURL('image/jpeg',.8)};if(store(data))apply(data);URL.revokeObjectURL(url)};original.onerror=()=>{alert('Could not open that image.');URL.revokeObjectURL(url)};original.src=url}catch{alert('Unable to read this photo.')}}
+ for(const id of ['tq-profile-upload','tq-profile-camera'])document.getElementById(id).addEventListener('change',e=>{choose(e.target.files?.[0]);e.target.value=''});
+ animated.addEventListener('change',()=>{const data={...load(),animated:animated.checked};store(data);apply(data)});
+ document.getElementById('tq-profile-remove').addEventListener('click',()=>{const data={animated:animated.checked};store(data);apply(data)});
+ function updateStats(){try{const cards=JSON.parse(localStorage.getItem('tcgquest-collection-v1')||'null');if(Array.isArray(cards)){document.getElementById('tq-home-cards').textContent=cards.length;const value=cards.reduce((s,c)=>s+(Number(c.value??0)||0),0);const base=cards.reduce((s,c)=>s+(Number(c.initialValue??c.value??0)||0),0);document.getElementById('tq-home-value').textContent=value.toLocaleString('en-US',{style:'currency',currency:'USD'});document.getElementById('tq-home-profit').textContent=(value-base).toLocaleString('en-US',{style:'currency',currency:'USD'})}}catch{}}
+ window.addEventListener('storage',updateStats);document.addEventListener('click',e=>{if(e.target.closest('#collection button'))setTimeout(updateStats,150)});
+})();
+</script><script>(()=>{const q=document.getElementById('ref-home-query');const cats=document.querySelectorAll('.ref-category');const sports=document.querySelectorAll('.ref-sport');let category='Pokémon',sport='Baseball';cats.forEach(b=>b.addEventListener('click',()=>{category=b.dataset.category;cats.forEach(x=>x.classList.toggle('selected',x===b))}));sports.forEach(b=>b.addEventListener('click',()=>{sport=b.textContent.trim();sports.forEach(x=>x.classList.toggle('selected',x===b))}));function urls(){const term=q.value.trim();const query=encodeURIComponent(term+(category==='Sports Cards'?' '+sport:''));document.getElementById('ref-ebay').href='https://www.ebay.com/sch/i.html?_nkw='+query;document.getElementById('ref-pricecharting').href='https://www.pricecharting.com/search-products?type=prices&q='+query;}q.addEventListener('input',urls);document.getElementById('ref-search').addEventListener('click',()=>{const target=document.getElementById('tq-price-query')||document.getElementById('tq-price-search');if(target&&'value' in target)target.value=q.value.trim();location.hash='prices';});const cvs=document.getElementById('ref-home-chart');function draw(){const ctx=cvs.getContext('2d');if(!ctx)return;const rect=cvs.getBoundingClientRect(),dpr=devicePixelRatio||1,w=Math.max(260,rect.width),h=220;cvs.width=w*dpr;cvs.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const pad=28;ctx.strokeStyle='#23435d';ctx.lineWidth=1;for(let i=0;i<5;i++){const y=12+(h-40)*i/4;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-10,y);ctx.stroke()}let cards=[];try{cards=JSON.parse(localStorage.getItem('tcgquest-collection-v1')||'[]');if(!Array.isArray(cards))cards=[]}catch{}const current=cards.reduce((s,c)=>s+(Number(c.value)||0),0),initial=cards.reduce((s,c)=>s+(Number(c.initialValue??c.value)||0),0);let history=[];try{const keys=Object.keys(localStorage).filter(k=>/history/i.test(k)&&/collection|vault|tcg/i.test(k));for(const k of keys){const obj=JSON.parse(localStorage.getItem(k));if(Array.isArray(obj)&&obj.length&&typeof obj[0]==='object'){history=obj;break}}}catch{}let pts=history.map(x=>({v:Number(x.totalValue??x.value??x.total??0),p:Number(x.profit??x.gain??0)})).filter(x=>Number.isFinite(x.v)&&Number.isFinite(x.p));if(pts.length<2)pts=[{v:initial,p:0},{v:current,p:current-initial}];pts=pts.slice(-30);const all=pts.flatMap(x=>[x.v,x.p]),min=Math.min(0,...all),max=Math.max(1,...all),range=max-min;for(const [key,color] of [['v','#249aff'],['p','#00e994']]){ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();pts.forEach((p,i)=>{const x=pad+(w-pad-10)*i/Math.max(1,pts.length-1),y=12+(h-40)*(1-(p[key]-min)/range);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();pts.forEach((p,i)=>{const x=pad+(w-pad-10)*i/Math.max(1,pts.length-1),y=12+(h-40)*(1-(p[key]-min)/range);ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill()})}ctx.font='11px Outfit, sans-serif';ctx.fillStyle='#93a8bf';ctx.fillText('$'+Math.round(max).toLocaleString(),1,12);ctx.fillText('$'+Math.round(min).toLocaleString(),1,h-27)}function recent(){let cards=[];try{cards=JSON.parse(localStorage.getItem('tcgquest-collection-v1')||'[]');if(!Array.isArray(cards))cards=[]}catch{}const el=document.getElementById('ref-recent-list');el.replaceChildren();if(!cards.length){el.textContent='Add a card to see it here.';return}for(const card of cards.slice(-4).reverse()){const item=document.createElement('div');item.className='ref-recent-item';const b=document.createElement('b');b.textContent=card.name||card.cardName||'Saved card';const small=document.createElement('small');small.textContent=(card.category||'Collector card')+' · $'+(Number(card.value)||0).toFixed(2);item.append(b,small);el.append(item)}}draw();recent();window.addEventListener('resize',draw);window.addEventListener('storage',()=>{draw();recent()});document.addEventListener('click',e=>{if(e.target.closest('[data-go="home"]')||e.target.closest('[data-tab="home"]')){draw();recent()}})})();</script>
+<style id="tq-final-refinement">
+/* Reference matching: retain real data and existing controls. */
+@media(min-width:1100px){
+  .ref-main{grid-template-columns:minmax(0,1.25fr) minmax(0,.93fr) minmax(0,.72fr)!important;}
+  .ref-heading,.ref-heading b{font-size:16px!important;font-weight:700!important;}
+  .ref-panel{padding:13px!important;}
+  .ref-metrics{gap:7px!important;}
+  .ref-metrics>div{min-height:88px!important;}
+  .ref-metrics strong{font-size:25px!important;letter-spacing:.1px!important;}
+  .ref-metrics small{font-size:12px!important;}
+  .ref-prices input{font-size:14px!important;}
+  .ref-prices button{font-size:13px!important;}
+  .ref-recent-list{font-size:13px!important;}
+  .ref-heading button{font-size:12px!important;}
+}
+.tq-tabs a{font-size:0!important;}
+.ref-quick>button,.ref-bottom>button{cursor:pointer!important;}
+</style>
+
+<script id="tq-nav-integrity">(function(){
+ const nav=document.getElementById('tq-tabs');if(!nav)return;
+ const expected=[['home','#home'],['collection','#collection'],['scanner','#scanner'],['prices','#prices'],['grading','#grading'],['market','#market'],['leaderboards','#rewards'],['rewards','#rewards'],['features','#features']];
+ const original=Array.from(nav.querySelectorAll(':scope > a'));
+ const used=new Set();
+ const links=expected.map(([key,href])=>{
+  const link=original.find(a=>!used.has(a)&&((key==='leaderboards'&&a.getAttribute('aria-label')?.includes('Leaderboards'))||(key==='rewards'&&a.textContent.includes('Rewards')&&!a.getAttribute('aria-label')?.includes('Leaderboards'))||(key!=='leaderboards'&&key!=='rewards'&&a.dataset.tab===key)));
+  if(link)used.add(link);return link;
+ }).filter(Boolean);
+ if(links.length===9){nav.replaceChildren(...links);}
+})();</script></body></html>
